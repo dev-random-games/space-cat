@@ -8,12 +8,12 @@ public class Controller implements GestureListener{
 	
 	LibgdxTest model;
 	
-	boolean selected = false;
+	boolean touchDown = false;
 
 	@Override
 	public boolean fling(float vX, float vY) {
 		vY = -vY;
-		selected = false;
+		touchDown = false;
 		return false;
 	}
 
@@ -26,9 +26,8 @@ public class Controller implements GestureListener{
 	@Override
 	public boolean pan(int x, int y, int dx, int dy) {
 		y = Gdx.graphics.getHeight() - y;
-		if (selected){
-			model.x += dx;
-			model.y -= dy;
+		if (touchDown){
+			
 		}
 		return false;
 	}
@@ -43,9 +42,6 @@ public class Controller implements GestureListener{
 		double dH = height - initHeight;
 		double dSize = dW + dH;
 		
-		model.bambi.width += dSize / 100;
-		model.bambi.height += dSize / 100;
-		
 		return false;
 	}
 
@@ -57,9 +53,10 @@ public class Controller implements GestureListener{
 	@Override
 	public boolean touchDown(int x, int y, int pointer) {
 		y = Gdx.graphics.getHeight() - y;
-		if (Math.abs(x - model.x) < 100 && Math.abs(y - model.y) < 100){
-			selected = true;
-		}
+		touchDown = true;
+		
+		
+		
 		return false;
 	}
 

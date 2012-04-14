@@ -3,7 +3,6 @@ package android.game;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL10;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -12,28 +11,24 @@ public class LibgdxTest implements ApplicationListener{
 	
 	private Stage stage;
 	
-	Sprite bambi;
-	
 	private SpriteBatch batch;
 	
 	Controller controller;
 	GestureDetector gestureDetector;
 	
-	int x = 10;
-	int y = 10;
+	Player player;
 
 	public void create() {
 		stage = new Stage(0, 0, true);
 		batch = new SpriteBatch();
 		
-		bambi = new Sprite("sun.png");
-		bambi.width = 50;
-		bambi.height = 50;
-		
 		controller = new Controller();
         controller.model = this;
         gestureDetector = new GestureDetector(controller);
         Gdx.input.setInputProcessor(gestureDetector);
+        
+        player = new Player();
+        player.v = new Vector3D(.1f, .1f, 0);
 	}
 
 	public void render() {
@@ -41,9 +36,8 @@ public class LibgdxTest implements ApplicationListener{
 		
 		batch.begin();
 		
-		bambi.x = x;
-		bambi.y = y;
-		bambi.draw(batch);
+		player.move();
+		player.draw(batch);
 		
 		batch.end();
 		
