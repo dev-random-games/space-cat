@@ -26,7 +26,7 @@ public class LibgdxTest implements ApplicationListener{
 		stage = new Stage(0, 0, true);
 		batch = new SpriteBatch();
 		
-		bambi = new Sprite("bambi.png");
+		bambi = new Sprite("sun.png");
 		bambi.width = 50;
 		bambi.height = 50;
 		
