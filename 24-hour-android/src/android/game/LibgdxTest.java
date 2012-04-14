@@ -21,6 +21,7 @@ public class LibgdxTest implements ApplicationListener{
 	public void create() {
 		stage = new Stage(0, 0, true);
 		batch = new SpriteBatch();
+		
 		controller = new Controller();
         controller.model = this;
         gestureDetector = new GestureDetector(controller);
