@@ -21,6 +21,7 @@ public class LibgdxTest implements ApplicationListener{
 	ArrayList<Planet> planets;
 	
 	Sprite menuBar;
+	Sprite fuel;
 	
 	int x, y;
 
@@ -47,6 +48,10 @@ public class LibgdxTest implements ApplicationListener{
         menuBar = new Sprite("menubar.png");
         menuBar.height = 50;
         menuBar.width = Gdx.graphics.getWidth();
+        
+        fuel = new Sprite("red.png");
+        fuel.height = 30;
+        fuel.width = Gdx.graphics.getWidth();
 	}
 
 	public void render() {
@@ -72,7 +77,10 @@ public class LibgdxTest implements ApplicationListener{
 		
 		menuBar.x = x;
 		menuBar.y = y;
-		menuBar.draw(batch, x, y);
+//		menuBar.draw(batch, x, y);
+		
+		fuel.width = (int) (Gdx.graphics.getWidth() * player.fuel / player.maxFuel);
+		fuel.draw(batch, 0, 0);
 		
 		batch.end();
 		
