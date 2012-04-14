@@ -7,6 +7,8 @@ public class Player extends Sprite{
 	Vector3D p, v;
 	
 	boolean launchMode = true;
+	int launchModeCoolDown = 0;
+	int maxLaunchModeCoolDown = 20;
 	
 	public Player() {
 		super("cat.png");
@@ -16,6 +18,7 @@ public class Player extends Sprite{
 	
 	public void move(){
 		p = p.add(v);
+		launchModeCoolDown -= 1;
 	}
 	
 	public void draw(SpriteBatch batch, int dx, int dy){
@@ -29,10 +32,24 @@ public class Player extends Sprite{
 	 * Influence the cat with gravity. Returns true if collision occurs
 	 */
 	public boolean influence(Planet planet){
+		Vector3D p = this.p.add(new Vector3D(width / 2, height / 2, 0));
 		Vector3D connector = p.subtract(planet.p);
 		Vector3D dir = connector.normalize().scale(-1);
+		int r = this.width / 2;
 		
-		v = v.add(dir.scale((float) (planet.m / connector.lengthSquared())));
+		double totalRadiusSquared = Math.pow(r + planet.r, 2);
+		if (totalRadiusSquared > connector.lengthSquared() && launchModeCoolDown <= 0){
+			launchMode = true;
+			v = dir.scale(-1);
+			p = planet.p.subtract(dir.scale((float) (planet.r + height)));
+			launchModeCoolDown = maxLaunchModeCoolDown;
+		}
+		
+		if (launchModeCoolDown > 0){
+			v = v.add(dir.scale((float) (planet.m / connector.lengthSquared()) * (maxLaunchModeCoolDown - launchModeCoolDown) / maxLaunchModeCoolDown));
+		} else {
+			v = v.add(dir.scale((float) (planet.m / connector.lengthSquared())));
+		}
 		
 		return false;
 	}
