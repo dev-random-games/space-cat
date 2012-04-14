@@ -15,15 +15,19 @@ public class LibgdxTest implements ApplicationListener{
 	
 	Controller controller;
 	GestureDetector gestureDetector;
+	
+	Player player;
 
 	public void create() {
 		stage = new Stage(0, 0, true);
 		batch = new SpriteBatch();
-		
 		controller = new Controller();
         controller.model = this;
         gestureDetector = new GestureDetector(controller);
         Gdx.input.setInputProcessor(gestureDetector);
+        
+        player = new Player();
+        player.v = new Vector3D(.1f, .1f, 0);
 	}
 
 	public void render() {
@@ -31,7 +35,8 @@ public class LibgdxTest implements ApplicationListener{
 		
 		batch.begin();
 		
-		new Sprite("cat.png").draw(batch);
+		player.move();
+		player.draw(batch);
 		
 		batch.end();
 		

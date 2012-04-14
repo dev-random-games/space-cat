@@ -8,6 +8,8 @@ public class Player extends Sprite{
 	
 	public Player() {
 		super("cat.png");
+		v = new Vector3D();
+        p = new Vector3D();
 	}
 	
 	public void move(){
