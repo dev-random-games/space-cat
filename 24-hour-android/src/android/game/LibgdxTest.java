@@ -46,17 +46,20 @@ public class LibgdxTest implements ApplicationListener{
 	public void render() {
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		
+		if (!player.launchMode){
+			player.move();
+			for (Planet planet : planets){
+				player.influence(planet);
+			}
+		}
+		
 		batch.begin();
-		
-		player.move();
-		
+
 		x = (int) player.x - Gdx.graphics.getWidth() / 2;
 		y = (int) player.y - Gdx.graphics.getHeight() / 2;
 		
 		for (Planet planet : planets){
 			planet.draw(batch, x, y);
-			player.influence(planet);
-			
 		}
 		
 		player.draw(batch, x, y);

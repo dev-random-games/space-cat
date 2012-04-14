@@ -13,6 +13,14 @@ public class Controller implements GestureListener{
 	@Override
 	public boolean fling(float vX, float vY) {
 		vY = -vY;
+		
+		int launchScale = 500;
+		
+		if (model.player.launchMode){
+			model.player.v = new Vector3D(vX / launchScale, vY / launchScale, 0);
+			model.player.launchMode = false;
+		}
+		
 		touchDown = false;
 		return false;
 	}
@@ -27,7 +35,7 @@ public class Controller implements GestureListener{
 	public boolean pan(int x, int y, int dx, int dy) {
 		y = Gdx.graphics.getHeight() - y;
 		if (touchDown){
-			model.player.v = model.player.p.subtract(new Vector3D(x, y, 0)).normalize().scale(-3);
+//			model.player.v = model.player.p.subtract(new Vector3D(x, y, 0)).normalize().scale(-3);
 		}
 		return false;
 	}
@@ -49,7 +57,7 @@ public class Controller implements GestureListener{
 	public boolean tap(int x, int y, int count) {
 		y = Gdx.graphics.getHeight() - y;
 		
-		model.player.v = model.player.p.subtract(new Vector3D(x, y, 0)).normalize().scale(-3);
+//		model.player.v = model.player.p.subtract(new Vector3D(x, y, 0)).normalize().scale(-3);
 		return false;
 	}
 

@@ -6,6 +6,8 @@ public class Player extends Sprite{
 
 	Vector3D p, v;
 	
+	boolean launchMode = true;
+	
 	public Player() {
 		super("cat.png");
 		v = new Vector3D();
