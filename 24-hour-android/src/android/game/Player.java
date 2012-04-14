@@ -17,6 +17,9 @@ public class Player extends Sprite{
 	}
 	
 	public void draw(SpriteBatch batch){
+		x = p.getX();
+		y = p.getY();
+		rotation = - 360 * Math.atan2(v.getX(), v.getY()) / (2 * Math.PI);
 		super.draw(batch);
 	}
 

@@ -27,7 +27,7 @@ public class LibgdxTest implements ApplicationListener{
         Gdx.input.setInputProcessor(gestureDetector);
         
         player = new Player();
-        player.v = new Vector3D(.1f, .1f, 0);
+        player.v = new Vector3D(1f, 1f, 0);
 	}
 
 	public void render() {

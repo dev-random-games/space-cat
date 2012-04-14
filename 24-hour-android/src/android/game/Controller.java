@@ -27,7 +27,7 @@ public class Controller implements GestureListener{
 	public boolean pan(int x, int y, int dx, int dy) {
 		y = Gdx.graphics.getHeight() - y;
 		if (touchDown){
-			
+			model.player.v = model.player.p.subtract(new Vector3D(x, y, 0)).normalize().scale(-3);
 		}
 		return false;
 	}
@@ -47,6 +47,9 @@ public class Controller implements GestureListener{
 
 	@Override
 	public boolean tap(int x, int y, int count) {
+		y = Gdx.graphics.getHeight() - y;
+		
+		model.player.v = model.player.p.subtract(new Vector3D(x, y, 0)).normalize().scale(-3);
 		return false;
 	}
 
@@ -54,8 +57,6 @@ public class Controller implements GestureListener{
 	public boolean touchDown(int x, int y, int pointer) {
 		y = Gdx.graphics.getHeight() - y;
 		touchDown = true;
-		
-		
 		
 		return false;
 	}
