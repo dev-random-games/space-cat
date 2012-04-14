@@ -1,15 +1,20 @@
 package android.game;
 
-import android.app.Activity;
+import com.badlogic.gdx.backends.android.AndroidApplication;
+
 import android.os.Bundle;
 
-public class androiGameActivity extends Activity {
+public class androidGameActivity extends AndroidApplication {
     /** Called when the activity is first created. */
+	
+	LibgdxTest model;
+	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
         
-        //Test
+        model = new LibgdxTest();
+        
+        initialize(model, false);
     }
 }
