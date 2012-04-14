@@ -9,14 +9,16 @@ public class Controller implements GestureListener{
 	LibgdxTest model;
 	
 	boolean touchDown = false;
+	Vector3D touchSpot;
+	
+	int launchScale = 500;
+	int fuelScale = 1500;
 
 	@Override
 	public boolean fling(float vX, float vY) {
 		LibgdxTest.bambi.play();
 		
 		vY = -vY;
-		
-		int launchScale = 500;
 		
 		if (model.player.launchMode){
 			model.player.v = new Vector3D(vX / launchScale, vY / launchScale, 0);
@@ -39,6 +41,11 @@ public class Controller implements GestureListener{
 		if (touchDown){
 //			model.player.v = model.player.p.subtract(new Vector3D(x, y, 0)).normalize().scale(-3);
 		}
+		
+		Vector3D a = new Vector3D((x - touchSpot.getX()) / fuelScale, (y - touchSpot.getY()) / fuelScale, 0);
+		model.player.fuel -= a.length();
+		model.player.v = model.player.v.add(a);
+		
 		return false;
 	}
 
@@ -67,6 +74,7 @@ public class Controller implements GestureListener{
 	public boolean touchDown(int x, int y, int pointer) {
 		y = Gdx.graphics.getHeight() - y;
 		touchDown = true;
+		touchSpot = new Vector3D(x, y, 0);
 		
 		return false;
 	}

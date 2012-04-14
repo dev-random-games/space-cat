@@ -29,6 +29,8 @@ public class LibgdxTest implements ApplicationListener{
 	Audio audio;
 	static Music bambi;
 	
+	Sprite fuel;
+	
 	int x, y;
 
 	public void create() {
@@ -59,6 +61,9 @@ public class LibgdxTest implements ApplicationListener{
         bambi = audio.newMusic(Gdx.files.internal("bambi.ogg"));
         //bambi.setLooping(true);
       
+        fuel = new Sprite("red.png");
+        fuel.height = 30;
+        fuel.width = Gdx.graphics.getWidth();
 
 	}
 
@@ -85,7 +90,10 @@ public class LibgdxTest implements ApplicationListener{
 		
 		menuBar.x = x;
 		menuBar.y = y;
-		menuBar.draw(batch, x, y);
+//		menuBar.draw(batch, x, y);
+		
+		fuel.width = (int) (Gdx.graphics.getWidth() * player.fuel / player.maxFuel);
+		fuel.draw(batch, 0, 0);
 		
 		batch.end();
 		

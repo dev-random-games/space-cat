@@ -6,6 +6,9 @@ public class Player extends Sprite{
 
 	Vector3D p, v;
 	
+	double fuel;
+	double maxFuel = 500;
+	
 	boolean launchMode = true;
 	int launchModeCoolDown = 0;
 	int maxLaunchModeCoolDown = 20;
@@ -14,6 +17,8 @@ public class Player extends Sprite{
 		super("cat.png");
 		v = new Vector3D();
         p = new Vector3D();
+        
+        fuel = maxFuel;
 	}
 	
 	public void move(){
