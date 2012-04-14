@@ -25,8 +25,8 @@ public class Sprite {
 		height = imgHeight;
 	}
 	
-	public void draw(SpriteBatch batch){
-		batch.draw(texture, (int) x, (int) y, width / 2, height / 2, width, height, 1, 1, (float) rotation);
+	public void draw(SpriteBatch batch, int dx, int dy){
+		batch.draw(texture, (int) x - dx, (int) y - dy, width / 2, height / 2, width, height, 1, 1, (float) rotation);
 	}
 	
 	public Rectangle getBoundingBox(){

@@ -16,11 +16,23 @@ public class Player extends Sprite{
 		p = p.add(v);
 	}
 	
-	public void draw(SpriteBatch batch){
+	public void draw(SpriteBatch batch, int dx, int dy){
 		x = p.getX();
 		y = p.getY();
 		rotation = - 360 * Math.atan2(v.getX(), v.getY()) / (2 * Math.PI);
-		super.draw(batch);
+		super.draw(batch, dx, dy);
+	}
+	
+	/*
+	 * Influence the cat with gravity. Returns true if collision occurs
+	 */
+	public boolean influence(Planet planet){
+		Vector3D connector = p.subtract(planet.p);
+		Vector3D dir = connector.normalize().scale(-1);
+		
+		v = v.add(dir.scale((float) (planet.m / connector.lengthSquared())));
+		
+		return false;
 	}
 
 }

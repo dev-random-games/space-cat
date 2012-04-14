@@ -1,5 +1,7 @@
 package android.game;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL10;
@@ -10,13 +12,16 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 public class LibgdxTest implements ApplicationListener{
 	
 	private Stage stage;
-	
 	private SpriteBatch batch;
-	
 	Controller controller;
 	GestureDetector gestureDetector;
 	
 	Player player;
+	ArrayList<Planet> planets;
+	
+	Sprite menuBar;
+	
+	int x, y;
 
 	public void create() {
 		stage = new Stage(0, 0, true);
@@ -26,9 +31,16 @@ public class LibgdxTest implements ApplicationListener{
         controller.model = this;
         gestureDetector = new GestureDetector(controller);
         Gdx.input.setInputProcessor(gestureDetector);
+        planets = new ArrayList<Planet>();
         
         player = new Player();
-        player.v = new Vector3D(1f, 1f, 0);
+        player.v = new Vector3D(1f, 2f, 0);
+        planets.add(new Planet("sun.png", new Vector3D(300, 200, 0), 100, 500));
+        planets.add(new Planet("sun.png", new Vector3D(500, 100, 0), 150, 1000));
+        
+        menuBar = new Sprite("menubar.png");
+        menuBar.height = 50;
+        menuBar.width = Gdx.graphics.getWidth();
 	}
 
 	public void render() {
@@ -37,7 +49,21 @@ public class LibgdxTest implements ApplicationListener{
 		batch.begin();
 		
 		player.move();
-		player.draw(batch);
+		
+		x = (int) player.x - Gdx.graphics.getWidth() / 2;
+		y = (int) player.y - Gdx.graphics.getHeight() / 2;
+		
+		for (Planet planet : planets){
+			planet.draw(batch, x, y);
+			player.influence(planet);
+			
+		}
+		
+		player.draw(batch, x, y);
+		
+		menuBar.x = x;
+		menuBar.y = y;
+		menuBar.draw(batch, x, y);
 		
 		batch.end();
 		
