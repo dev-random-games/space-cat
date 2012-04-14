@@ -1,6 +1,7 @@
 package android.game;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Audio;
@@ -40,8 +41,13 @@ public class LibgdxTest implements ApplicationListener{
         
         player = new Player();
         player.v = new Vector3D(1f, 2f, 0);
-        planets.add(new Planet("sun.png", new Vector3D(300, 200, 0), 100, 500));
-        planets.add(new Planet("sun.png", new Vector3D(500, 100, 0), 150, 1000));
+//        planets.add(new Planet("sun.png", new Vector3D(300, 200, 0), 100, 1000));
+//        planets.add(new Planet("sun.png", new Vector3D(500, 100, 0), 150, 3000));
+        
+        Random random = new Random();
+        for (int i = 0; i < 20; i++){
+        	planets.add(new Planet("sun.png", new Vector3D(random.nextInt(5000), random.nextInt(5000), 0), random.nextInt(500)));
+        }
         
         menuBar = new Sprite("menubar.png");
         menuBar.height = 50;
@@ -53,17 +59,20 @@ public class LibgdxTest implements ApplicationListener{
 	public void render() {
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		
+		if (!player.launchMode){
+			player.move();
+			for (Planet planet : planets){
+				player.influence(planet);
+			}
+		}
+		
 		batch.begin();
-		
-		player.move();
-		
+
 		x = (int) player.x - Gdx.graphics.getWidth() / 2;
 		y = (int) player.y - Gdx.graphics.getHeight() / 2;
 		
 		for (Planet planet : planets){
 			planet.draw(batch, x, y);
-			player.influence(planet);
-			
 		}
 		
 		player.draw(batch, x, y);
