@@ -6,6 +6,7 @@ import java.util.Random;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Audio;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.graphics.GL10;
@@ -26,6 +27,7 @@ public class LibgdxTest implements ApplicationListener{
 	Sprite menuBar;
 	
 	Audio audio;
+	static Music bambi;
 	
 	int x, y;
 
@@ -53,6 +55,10 @@ public class LibgdxTest implements ApplicationListener{
         menuBar.height = 50;
         menuBar.width = Gdx.graphics.getWidth();
         
+        audio = Gdx.audio;
+        bambi = audio.newMusic(Gdx.files.internal("bambi.ogg"));
+        //bambi.setLooping(true);
+      
 
 	}
 
@@ -89,9 +95,6 @@ public class LibgdxTest implements ApplicationListener{
 
 	public void resize(int width, int height) {
 		stage.setViewport(width, height, true);
-        audio = Gdx.audio;
-        Sound bambi = audio.newSound(Gdx.files.internal("bambi.ogg"));
-        bambi.play(100);
 	}
 
 	public void dispose() {

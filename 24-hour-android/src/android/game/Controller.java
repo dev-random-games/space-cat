@@ -12,6 +12,8 @@ public class Controller implements GestureListener{
 
 	@Override
 	public boolean fling(float vX, float vY) {
+		LibgdxTest.bambi.play();
+		
 		vY = -vY;
 		
 		int launchScale = 500;
