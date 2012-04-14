@@ -3,7 +3,10 @@ package android.game;
 import java.util.ArrayList;
 
 import com.badlogic.gdx.ApplicationListener;
+import com.badlogic.gdx.Audio;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.input.GestureDetector;
@@ -20,6 +23,8 @@ public class LibgdxTest implements ApplicationListener{
 	ArrayList<Planet> planets;
 	
 	Sprite menuBar;
+	
+	Audio audio;
 	
 	int x, y;
 
@@ -41,6 +46,8 @@ public class LibgdxTest implements ApplicationListener{
         menuBar = new Sprite("menubar.png");
         menuBar.height = 50;
         menuBar.width = Gdx.graphics.getWidth();
+        
+
 	}
 
 	public void render() {
@@ -73,6 +80,9 @@ public class LibgdxTest implements ApplicationListener{
 
 	public void resize(int width, int height) {
 		stage.setViewport(width, height, true);
+        audio = Gdx.audio;
+        Sound bambi = audio.newSound(Gdx.files.internal("bambi.ogg"));
+        bambi.play(100);
 	}
 
 	public void dispose() {
