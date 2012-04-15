@@ -24,9 +24,9 @@ public class Player extends Sprite{
 	}
 	
 	public void move(){
-		if (fuel > 0){
 		a = a.scale(.9);
-		fuel -= a.length() * 5;
+		if (fuel > 0){
+			fuel -= a.length() * 5;
 		} else {
 			fuel = 0;
 		}
