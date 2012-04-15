@@ -15,7 +15,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL10;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -54,6 +56,10 @@ public class LibgdxTest implements ApplicationListener{
 	Menu creditsMenu;
 	
 	Sprite glowG, glowR, glowB;
+	
+	Sprite menuButton;
+	
+	BitmapFont terminus;
 
 	public void create() {	
 		
@@ -86,6 +92,12 @@ public class LibgdxTest implements ApplicationListener{
         this.camera = new Camera(this.player);
         
         bg = new TiledSprite("starbg.png");
+        
+        terminus = new BitmapFont(Gdx.files.internal("terminus.fon"), false);
+        
+        menuButton = new Sprite("menuButton.png");
+        menuButton.x = 0;
+        menuButton.y = Gdx.graphics.getHeight() - menuButton.height;
         
         herpMenu = new Menu("menu.png");
         herpMenu.addButton(new Button(200, 100, 300, 100, true){
@@ -237,6 +249,8 @@ public class LibgdxTest implements ApplicationListener{
 		fuel.width = (int) (Gdx.graphics.getWidth() * player.fuel / player.maxFuel);
 		fuel.x = (int) ((Gdx.graphics.getWidth() - fuel.width) / 2);
 		fuel.draw(batch, 0, 0);
+		
+		menuButton.draw(batch, 0, 0);
 		
 		batch.end();
 		
