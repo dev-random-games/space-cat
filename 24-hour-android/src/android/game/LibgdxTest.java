@@ -15,9 +15,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL10;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.input.GestureDetector;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+
 
 public class LibgdxTest implements ApplicationListener{
 	
@@ -33,6 +37,9 @@ public class LibgdxTest implements ApplicationListener{
 	
 	Audio audio;
 	static Music bambi;
+	
+	int levelEndWait = 0;
+	int maxLevelEndWait = 80;
 	
 	Sprite fuel;
 	
@@ -52,12 +59,17 @@ public class LibgdxTest implements ApplicationListener{
 	Menu herpMenu;
 	Menu levelMenu;
 	Menu mainMenu;
+	Menu creditsMenu;
+	
+	Sprite glowG, glowR, glowB;
+	
+	Sprite menuButton;
+	
+	BitmapFont terminus;
 
 	public void create() {	
 		
 		particleSources = new ArrayList<ParticleSource>();
-		
-		//particleSources.add(new ParticleSource(100, 10, 0, new Vector3D(.1, .1, 0), new Vector3D(0, 0, 0), 20, "red.png"));
 		
 		stage = new Stage(0, 0, true);
 		batch = new SpriteBatch();
@@ -79,10 +91,21 @@ public class LibgdxTest implements ApplicationListener{
         fuel = new Sprite("fuelbar.png");
         fuel.height = 15;
         fuel.width = Gdx.graphics.getWidth();
+        
+        glowR = new Sprite("redGlow.png", 200, 200);
+        glowG = new Sprite("greenGlow.png", 300, 300);
+        //glowG.width = glowG.height = 500;
+        glowB = new Sprite("blueGlow.png", 200, 200);
 
         this.camera = new Camera(this.player);
         
         bg = new TiledSprite("starbg.png");
+        
+//        terminus = new BitmapFont(Gdx.files.internal("terminus.fon"), false);
+        
+        menuButton = new Sprite("menuButton.png");
+        menuButton.x = 0;
+        menuButton.y = Gdx.graphics.getHeight() - menuButton.height;
         
         herpMenu = new Menu("menu.png");
         herpMenu.addButton(new Button(200, 100, 300, 100, true){
@@ -152,28 +175,49 @@ public class LibgdxTest implements ApplicationListener{
         mainMenu.addButton(new Button(60, 256 - 197, 178 - 60, 197 - 183, true){
 			public void react(LibgdxTest model) {
 				Log.d("Button", "Credits");
+				currentMenu = creditsMenu;
 			}
         });
         currentMenu = mainMenu;
+        
+        creditsMenu = new Menu("credits.png");
+        /*
+         * Credits
+         */
+        creditsMenu.addButton(new Button(60, 256 - 197, 178 - 60, 197 - 183, true){
+			public void react(LibgdxTest model) {
+				Log.d("Button", "BACK");
+				currentMenu = mainMenu;
+			}
+        });
 	}
 
 	public void render() {
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		
 		if (!menuMode){
-			if (!player.launchMode){
-				player.move();
-				for (Planet planet : planets){
-					int response = player.influence(planet);
-					if (response == 1){
-						particleSources.add(new ParticleSource(75, 50, 5, new Vector3D(0, 0, 0), new Vector3D(player.x, player.y, 0), 20, "confetti_0.png"));
-						//loadLevel(levelNum + 1);
-					} else if (response == 2){
-						loadLevel(levelNum);
+			if (levelEndWait <= 0){
+				if (!player.launchMode){
+					player.move();
+					for (Planet planet : planets){
+						int response = player.influence(planet);
+						if (response == 1){
+							levelEndWait = maxLevelEndWait;
+							particleSources.add(new ParticleSource(200, 100, 2, new Vector3D(0, 0, 0), new Vector3D(player.x + player.width/2, player.y + player.height/2, 0), 40, "confetti_3.png"));
+						} else if (response == 2){
+							loadLevel(levelNum);
+						}
 					}
 				}
+			} else if (levelEndWait == 1){
+				levelEndWait = 0;
+				loadLevel(levelNum + 1);
+			} else {
+				levelEndWait --;
 			}
 		}
+		
+		Rectangle window = new Rectangle(x, y, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 			
 		batch.begin();
 		
@@ -188,12 +232,35 @@ public class LibgdxTest implements ApplicationListener{
 			
 		}
 		
-		player.draw(batch, x, y, (int) win.p.getX(), (int) win.p.getY());
-		particleSources.add(new ParticleSource(30, 10, 3, new Vector3D(0, 0, 0), new Vector3D(player.x + player.width/2, player.y + player.height/2, 0), 20, "red.png"));
+		for (Planet planet : planets){
+			Vector3D toPlanet = planet.p.subtract(player.p);
+			Vector3D wallIntersect = LibgdxTest.vectorIntersectionWithRectangle(player.p, toPlanet, x, y, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+			Vector3D position = wallIntersect;//.add(toPlanet.scale(20 / toPlanet.lengthSquared()));
+			
+			if (planet.t == Planet.type.WIN){
+				glowG.x = position.getX() - glowG.width / 2;
+				glowG.y = position.getY() - glowG.height / 2;
+				glowG.draw(batch, x, y);
+				//batch.draw(texture, (int) x - dx, (int) y - dy, width / 2, height / 2, width, height, 1, 1, (float) rotation);
+			} else if (toPlanet.length() < Math.sqrt(Gdx.graphics.getWidth() * Gdx.graphics.getHeight()) && !window.contains((float) planet.x, (float) planet.y)){
+				if (planet.t == Planet.type.HOSTILE){
+					position = position.add(toPlanet.scale(1 / 30));
+					glowR.x = position.getX() - glowR.width / 2;
+					glowR.y = position.getY() - glowR.height / 2;
+					glowR.draw(batch, x, y);
+				} else if (planet.t == Planet.type.FRIENDLY){
+					position = position.add(toPlanet.scale(1 / 30));
+					glowB.x = position.getX() - glowB.width / 2;
+					glowB.y = position.getY() - glowB.height / 2;
+					glowB.draw(batch, x, y);
+				}
+			
+			}
+		}
 		
-		fuel.width = (int) (Gdx.graphics.getWidth() * player.fuel / player.maxFuel);
-		fuel.x = (int) ((Gdx.graphics.getWidth() - fuel.width) / 2);
-		fuel.draw(batch, 0, 0);
+		particleSources.add(new ParticleSource(30, 2, 1, new Vector3D(0, 0, 0), new Vector3D(player.x + player.width/2, player.y + player.height/2, 0), 15, "red.png"));
+	
+		menuButton.draw(batch, 0, 0);
 		
 		int i = 0;
 		while (i < particleSources.size()) {
@@ -203,6 +270,12 @@ public class LibgdxTest implements ApplicationListener{
 				particleSources.remove(i);
 			}
 		}
+		
+		fuel.width = (int) (Gdx.graphics.getWidth() * player.fuel / player.maxFuel);
+		fuel.x = (int) ((Gdx.graphics.getWidth() - fuel.width) / 2);
+		fuel.draw(batch, 0, 0);
+		
+		player.draw(batch, x, y, (int) win.p.getX(), (int) win.p.getY());
 		
 		batch.end();
 		
@@ -273,8 +346,6 @@ public class LibgdxTest implements ApplicationListener{
 		
 		Random random = new Random();
 		
-		player.launchMode = true;
-		
 		try {
 			while ((line = reader.readLine()) != null){
 				String[] elements = line.split(" ");
@@ -315,6 +386,8 @@ public class LibgdxTest implements ApplicationListener{
 					win = p;
 				}
 			}
+			
+			player.launchMode = true;
 		} catch (IOException e) {
 			Log.e("LibgdxTest", "Failed to load level " + levelName);
 		}

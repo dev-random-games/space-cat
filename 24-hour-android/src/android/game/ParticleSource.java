@@ -38,7 +38,7 @@ public class ParticleSource {
 			pos = pos.normalize();
 			//Vector3D vel = new Vector3D(r.nextInt(2000) - 1000, r.nextInt(2000) - 1000, 0);
 			Vector3D vel = pos.add(new Vector3D());
-			pos = pos.scale(maxInitDisplacement);
+			pos = pos.scale(r.nextDouble() * maxInitDisplacement);
 			vel = vel.scale(maxExplodeSpeed);
 			particles.add(new Particle(pos, vel, r.nextInt(halfLife)));
 		}

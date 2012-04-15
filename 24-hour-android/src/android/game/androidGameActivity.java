@@ -2,6 +2,7 @@ package android.game;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
 
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 
 public class androidGameActivity extends AndroidApplication {
@@ -14,6 +15,8 @@ public class androidGameActivity extends AndroidApplication {
         super.onCreate(savedInstanceState);
         
         model = new LibgdxTest();
+        
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         
         initialize(model, false);
     }

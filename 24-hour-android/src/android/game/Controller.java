@@ -2,6 +2,7 @@ package android.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.input.GestureDetector.GestureListener;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 public class Controller implements GestureListener{
@@ -70,6 +71,11 @@ public class Controller implements GestureListener{
 		y = Gdx.graphics.getHeight() - y;
 		
 //		model.player.v = model.player.p.subtract(new Vector3D(x, y, 0)).normalize().scale(-3);
+		
+		if (model.menuButton.intersects(new Rectangle(x - 5, y - 5, 10, 10))){
+			model.menuMode = true;
+		}
+		
 		return false;
 	}
 

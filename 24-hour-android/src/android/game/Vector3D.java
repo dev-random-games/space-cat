@@ -51,7 +51,7 @@ public class Vector3D {
 	}
 
 	public Vector3D normalize() { // Return unit vector with same direction
-		return scale(1 / length());
+		return scale(1.0 / length());
 	}
 
 	public double dotProduct(Vector3D vector) {

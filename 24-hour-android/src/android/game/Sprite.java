@@ -29,6 +29,14 @@ public class Sprite {
 		height = imgHeight;
 	}
 	
+	public Sprite (String filename, int width, int height){
+		texture = new TextureRegion(new Texture(Gdx.files.internal(filename)));
+		imgWidth = texture.getRegionWidth();
+		imgHeight = texture.getRegionHeight();
+		this.width = width;
+		this.height = height;
+	}
+	
 	public Sprite (String filename, double rotation) {
 		texture = new TextureRegion(new Texture(Gdx.files.internal(filename)));
 		imgWidth = texture.getRegionWidth();
