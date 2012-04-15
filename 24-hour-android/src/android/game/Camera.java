@@ -10,8 +10,8 @@ public class Camera {
 	Player player;
 	Vector3D playerCenter;
 	
-	double velocityPreservation = 0.90;
-	double focalAttraction = 0.01;
+	double velocityPreservation = 0.1;
+	double focalAttraction = 0.5;
 	
 	public Camera(Player player) {
 		this.player = player;

@@ -9,13 +9,17 @@ import com.badlogic.gdx.math.Rectangle;
 public class Sprite {
 	protected TextureRegion texture;
 	
-	private int imgWidth, imgHeight;
+	protected int imgWidth;
+
+	protected int imgHeight;
 	
 	double x, y;
 	
 	int width, height;
 	
 	double rotation;
+	
+	boolean rotCenter = true;
 	
 	public Sprite (String filename){
 		texture = new TextureRegion(new Texture(Gdx.files.internal(filename)));
@@ -35,7 +39,11 @@ public class Sprite {
 	}
 	
 	public void draw(SpriteBatch batch, int dx, int dy){
-		batch.draw(texture, (int) x - dx, (int) y - dy, width / 2, height / 2, width, height, 1, 1, (float) rotation);
+		if (rotCenter){
+			batch.draw(texture, (int) x - dx, (int) y - dy, width / 2, height / 2, width, height, 1, 1, (float) rotation);
+		} else {
+			batch.draw(texture, (int) x - dx, (int) y - dy, 0, 0, width, height, 1, 1, (float) rotation);
+		}
 	}
 	
 	public Rectangle getBoundingBox(){
