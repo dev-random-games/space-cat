@@ -33,6 +33,9 @@ public class LibgdxTest implements ApplicationListener{
 	Sprite fuel;
 	
 	int x, y;
+	
+	int levelNum;
+	String levels = "levels";
 
 	public void create() {
 		stage = new Stage(0, 0, true);
@@ -45,9 +48,6 @@ public class LibgdxTest implements ApplicationListener{
         planets = new ArrayList<Planet>();
         
         player = new Player();
-        player.v = new Vector3D(1f, 2f, 0);
-//        planets.add(new Planet("sun.png", new Vector3D(300, 200, 0), 100, 1000));
-//        planets.add(new Planet("sun.png", new Vector3D(500, 100, 0), 150, 3000));
         
         /*
          * Creates planets
@@ -65,7 +65,7 @@ public class LibgdxTest implements ApplicationListener{
 //        	}
 //        	planets.add(new Planet(planet, new Vector3D(random.nextInt(5000), random.nextInt(5000), 0), random.nextInt(500)));
 //        }
-        loadLevel("testLvl.lvl");
+        loadLevels("levels", 1);
         
         audio = Gdx.audio;
         bambi = audio.newMusic(Gdx.files.internal("bambi.ogg"));
@@ -83,7 +83,12 @@ public class LibgdxTest implements ApplicationListener{
 		if (!player.launchMode){
 			player.move();
 			for (Planet planet : planets){
-				player.influence(planet);
+				int response = player.influence(planet);
+				if (response == 1){
+					loadLevels(levels, levelNum + 1);
+				} else if (response == 2){
+					loadLevels(levels, levelNum);
+				}
 			}
 		}
 		
@@ -125,6 +130,29 @@ public class LibgdxTest implements ApplicationListener{
 	}
 	
 	/*
+	 * Load a series of levels
+	 */
+	public boolean loadLevels(String levelsList, int levelNum){
+		FileHandle file = Gdx.files.internal(levelsList);
+		BufferedReader reader = new BufferedReader(file.reader());
+		
+		try {
+			for (int i = 0; i < levelNum - 1; i++){
+					reader.readLine();
+			}
+			
+			loadLevel(reader.readLine());
+		} catch (IOException e) {
+			Log.e("LibgdxTest", "Not enough levels in level file!");
+			return false;
+		}
+		
+		this.levelNum = levelNum;
+		
+		return true;
+	}
+	
+	/*
 	 * Load the level stored in the specified file.
 	 */
 	public void loadLevel(String levelName){
@@ -134,6 +162,8 @@ public class LibgdxTest implements ApplicationListener{
 		String line;
 		
 		planets = new ArrayList<Planet>();
+		
+		player = new Player();
 		
 		try {
 			while ((line = reader.readLine()) != null){

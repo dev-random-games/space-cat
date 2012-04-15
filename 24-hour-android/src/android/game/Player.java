@@ -8,6 +8,7 @@ public class Player extends Sprite{
 	
 	double fuel;
 	double maxFuel = 500;
+	boolean refill = false;
 	
 	boolean launchMode = true;
 	int launchModeCoolDown = 0;
@@ -31,6 +32,14 @@ public class Player extends Sprite{
 		y = p.getY();
 		rotation = - 360 * Math.atan2(v.getX(), v.getY()) / (2 * Math.PI);
 		super.draw(batch, dx, dy);
+		if (refill){
+			if (fuel < maxFuel){
+				fuel += 10;
+			} else {
+				fuel = maxFuel;
+				refill = false;
+			}
+		}
 	}
 	
 	/*
@@ -50,6 +59,15 @@ public class Player extends Sprite{
 			v = dir.scale(-1);
 			p = planet.p.subtract(dir.scale((float) (planet.r + height)));
 			launchModeCoolDown = maxLaunchModeCoolDown;
+			
+			if (planet.t == Planet.type.WIN){
+				return 1;
+			} else if (planet.t == Planet.type.HOSTILE){
+				return 2;
+			} else if (planet.t == Planet.type.FRIENDLY){
+				refill = true;
+			}
+			
 		}
 		
 		if (launchModeCoolDown > 0){
