@@ -53,11 +53,18 @@ public class LibgdxTest implements ApplicationListener{
 	static Music thbb0;
 	static Music thbb1;
 	
+	static Music bgMusic;
+	static Music menuMusic;
+	static Music happyMeow;
+	static Music sadMeow;
+	static Music lostMeow;
+	
 	int levelEndWait = 0;
 	int maxLevelEndWait = 70;
 	String doWhatAfterWait;
 	
 	Sprite fuel;
+	Sprite fuelLow;
 	
 	Camera camera;
 	
@@ -77,6 +84,7 @@ public class LibgdxTest implements ApplicationListener{
 	Menu mainMenu;
 	Menu creditsMenu;
 	Menu tutorialMenu;
+	Menu scoresMenu;
 	
 	Sprite glowG, glowR, glowB;
 	
@@ -86,6 +94,8 @@ public class LibgdxTest implements ApplicationListener{
 	
 	private TextureAtlas atlas;
     private BitmapFont font;
+    
+    Rectangle levelBox;
     
 
 	public void create() {	
@@ -115,11 +125,26 @@ public class LibgdxTest implements ApplicationListener{
         meow2 = audio.newMusic(Gdx.files.internal("sound/meow-2.ogg"));
         thbb0 = audio.newMusic(Gdx.files.internal("sound/thhhbbb-1.ogg"));
         thbb1 = audio.newMusic(Gdx.files.internal("sound/thhhbbb-3.ogg"));
+        
+        bgMusic =   audio.newMusic(Gdx.files.internal("sound/3-1_final.ogg"));
+        menuMusic = audio.newMusic(Gdx.files.internal("sound/blue_danube_hardcore.ogg"));
+    	happyMeow = audio.newMusic(Gdx.files.internal("sound/happy_meow_0.ogg"));
+    	sadMeow =   audio.newMusic(Gdx.files.internal("sound/sad_meow_0.ogg"));
+    	lostMeow =  audio.newMusic(Gdx.files.internal("sound/lost_meow_0.ogg"));
+    	bgMusic.setLooping(true);
+    	menuMusic.setLooping(true);
+    	bgMusic.setVolume(.3f);
         //bambi.setLooping(true);
       
         fuel = new Sprite("fuelbar.png");
         fuel.height = 15;
         fuel.width = Gdx.graphics.getWidth();
+        
+        fuelLow = new Sprite("fuelLow.png");
+        fuelLow.width *= 3;
+        fuelLow.height *= 3;
+        fuelLow.x = Gdx.graphics.getWidth() / 2 - fuelLow.width / 2;
+        fuelLow.y = 15;
         
         glowR = new Sprite("redGlow.png", 100, 100);
         glowG = new Sprite("greenGlow.png", 200, 200);
@@ -141,10 +166,8 @@ public class LibgdxTest implements ApplicationListener{
         		currentMenu = mainMenu;
         	}
         });
-        currentMenu = herpMenu;
         
         levelMenu = new Menu("levelmenu.png");
-        currentMenu = levelMenu;
         levelMenu.addButton(new Button(28, 64 - 5 - 10, 10, 10, true){
         	public void react(LibgdxTest model){
         		model.currentMenu = model.mainMenu;
@@ -159,6 +182,13 @@ public class LibgdxTest implements ApplicationListener{
         levelMenu.addButton(new LevelButton(17, 64 - 40 - 10, 10, 10, true, 7));
         levelMenu.addButton(new LevelButton(28, 64 - 40 - 10, 10, 10, true, 8));
         levelMenu.addButton(new LevelButton(39, 64 - 40 - 10, 10, 10, true, 9));
+        
+        scoresMenu = new Menu("scoresMenu.png");
+        scoresMenu.addButton(new Button(0, 0, 256, 256, true){
+        	public void react(LibgdxTest model){
+        		model.currentMenu = model.mainMenu;
+        	}
+        });
         
         mainMenu = new Menu("mainmenu.png");
         /*
@@ -195,6 +225,7 @@ public class LibgdxTest implements ApplicationListener{
         mainMenu.addButton(new Button(60, 256 - 171, 178 - 60, 171 - 156, true){
 			public void react(LibgdxTest model) {
 				Log.d("Button", "Scores");
+				currentMenu = scoresMenu;
 			}
         });
         /*
@@ -224,17 +255,24 @@ public class LibgdxTest implements ApplicationListener{
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		
 		if (!menuMode){
+			if (!bgMusic.isPlaying()){
+				bgMusic.play();
+				menuMusic.stop();
+			}
+			
 			if (levelEndWait <= 0){
 				if (!player.launchMode){
 					player.move();
 					for (Planet planet : planets){
 						int response = player.influence(planet);
 						if (response == 1){
+							LibgdxTest.happyMeow.play();
 							levelEndWait = maxLevelEndWait;
 							doWhatAfterWait = "nextlevel";
 							particleSources.add(new ParticleSource(150, 100, 2, new Vector3D(0, 0, 0), new Vector3D(player.x + player.width/2, player.y + player.height/2, 0), 40, "spark_3.png"));
 						} else if (response == 2){
 							//loadLevel(levelNum);
+							LibgdxTest.lostMeow.play();
 							levelEndWait = maxLevelEndWait;
 							doWhatAfterWait = "restartlevel";
 							particleSources.add(new ParticleSource(150, 100, 2, new Vector3D(0, 0, 0), new Vector3D(player.x + player.width/2, player.y + player.height/2, 0), 40, "spark_4.png"));
@@ -252,6 +290,11 @@ public class LibgdxTest implements ApplicationListener{
 				}
 			} else {
 				levelEndWait --;
+			}
+		} else {
+			if (!menuMusic.isPlaying()){
+				bgMusic.stop();
+				menuMusic.play();
 			}
 		}
 		
@@ -299,6 +342,8 @@ public class LibgdxTest implements ApplicationListener{
 			}
 		}
 		
+		if (!player.getBoundingBox().overlaps(levelBox)) loadLevel(levelNum);
+		
 		if ((!player.launchMode) && (levelEndWait == 0)){
 			particleSources.add(new ParticleSource(30, 2, 1, new Vector3D(0, 0, 0), new Vector3D(player.x + player.width/2, player.y + player.height/2, 0), 15, "red.png"));
 		}
@@ -326,6 +371,10 @@ public class LibgdxTest implements ApplicationListener{
 		
 		//MAYBE
 		player.draw(batch, x, y);
+		
+		if (player.fuel < player.maxFuel / 3){
+			fuelLow.draw(batch, 0, 0);
+		}
 		
 		batch.end();
 		
@@ -373,12 +422,28 @@ public class LibgdxTest implements ApplicationListener{
 			}
 //			Log.v("hello", reader.readLine());
 			loadLevel(reader.readLine());
+			
+			levelBox = new Rectangle();
+			
+			for (Planet p : planets){
+				levelBox.merge(p.getBoundingBox());
+				
+				int boundary = 500;
+				
+				levelBox.x -= boundary;
+				levelBox.y -= boundary;
+				levelBox.width += boundary * 2;
+				levelBox.height += boundary * 2;
+			}
+			
 		} catch (IOException e) {
 			Log.e("LibgdxTest", "Not enough levels in level file!");
 			return false;
 		}
 		
 		this.levelNum = levelNum;
+		
+		player.launchMode = true;
 		
 		return true;
 	}
