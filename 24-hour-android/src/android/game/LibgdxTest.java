@@ -102,7 +102,7 @@ public class LibgdxTest implements ApplicationListener{
 		
 		batch.begin();
 
-		this.camera.update();
+		this.camera.update(player);
 		x = (int) camera.loc.getX();
 		y = (int) camera.loc.getY();
 		
