@@ -106,6 +106,8 @@ public class LibgdxTest implements ApplicationListener{
         mainMenu.addButton(new Button(35, 256 - 90, 175 - 35, 90 - 75, true){
 			public void react(LibgdxTest model) {
 				Log.d("Button", "Start Game");
+				menuMode = false;
+				loadLevel(1);
 			}
         });
         /*
@@ -297,11 +299,38 @@ public class LibgdxTest implements ApplicationListener{
 		
 	}
 	
-//	public Vector3D vectorIntersectionWithRectangle(Vector3D p, Vector3D v, int x, int y, int w, int h){
-//		Vector3D toReturn;
-//		int distanceToPoint = 100000000;
-//		
-//		return toReturn;
-//	}
+	public static Vector3D vectorIntersectionWithRectangle(Vector3D p, Vector3D v, int x, int y, int w, int h){
+		Vector3D toReturn = new Vector3D();
+		int distanceToPoint = 100000000;
+		
+		double a = - v.getY();
+		double b = v.getX();
+		double d = a * p.getX() + b * p.getY();
+		
+		/*
+		 * Check against each side of the rectangle, represented by four point-vector pairs
+		 */
+		for (Vector3D[] side : new Vector3D[][] {{new Vector3D(x, y, 0), new Vector3D(1, 0, 0)}, {new Vector3D(x, y, 0), new Vector3D(0, 1, 0)},
+												 {new Vector3D(x + w, y, 0), new Vector3D(0, 1, 0)}, {new Vector3D(x, y + h, 0), new Vector3D(1, 0, 0)}}){
+			Vector3D p1 = side[0];
+			Vector3D v1 = side[1];
+			
+			double a1 = - v1.getY();
+			double b1 = v1.getX();
+			double d1 = a1 * p1.getX() + b1 * p1.getY();
+			
+			Vector3D intersection = new Vector3D((b1 * d - b * d1) / (a * b1 - a1 * b),
+					  							(a * d1 - a1 * d) / (a * b1 - a1 * b), 0);
+			
+			int dist = (int) intersection.subtract(p).length();
+			
+			if (dist < distanceToPoint && intersection.subtract(p).dotProduct(v) > 0){
+				toReturn = intersection;
+				distanceToPoint = dist;
+			}
+		}
+		
+		return toReturn;
+	}
 
 }
