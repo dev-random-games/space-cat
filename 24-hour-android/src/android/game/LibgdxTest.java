@@ -398,8 +398,8 @@ public class LibgdxTest implements ApplicationListener{
 		
 		Random random = new Random();
 		
-		int cscalar = 200;
-		int rscalar = 10;
+		int cscalar = 100;
+		int rscalar = 5;
 		
 		for (int x = 0; x < levelBMP.getWidth() - 1; x++) {
 			for (int y = 0; y < levelBMP.getHeight() - 1; y++) {
