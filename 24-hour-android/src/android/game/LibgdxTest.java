@@ -81,6 +81,7 @@ public class LibgdxTest implements ApplicationListener{
 	Menu levelMenu;
 	Menu mainMenu;
 	Menu creditsMenu;
+	Menu scoresMenu;
 	
 	Sprite glowG, glowR, glowB;
 	
@@ -163,10 +164,8 @@ public class LibgdxTest implements ApplicationListener{
         		model.menuMode = false;
         	}
         });
-        currentMenu = herpMenu;
         
         levelMenu = new Menu("levelmenu.png");
-        currentMenu = levelMenu;
         levelMenu.addButton(new Button(28, 64 - 5 - 10, 10, 10, true){
         	public void react(LibgdxTest model){
         		model.currentMenu = model.mainMenu;
@@ -181,6 +180,13 @@ public class LibgdxTest implements ApplicationListener{
         levelMenu.addButton(new LevelButton(17, 64 - 40 - 10, 10, 10, true, 7));
         levelMenu.addButton(new LevelButton(28, 64 - 40 - 10, 10, 10, true, 8));
         levelMenu.addButton(new LevelButton(39, 64 - 40 - 10, 10, 10, true, 9));
+        
+        scoresMenu = new Menu("scoresMenu.png");
+        scoresMenu.addButton(new Button(0, 0, 256, 256, true){
+        	public void react(LibgdxTest model){
+        		model.currentMenu = model.mainMenu;
+        	}
+        });
         
         mainMenu = new Menu("mainmenu.png");
         /*
@@ -216,6 +222,7 @@ public class LibgdxTest implements ApplicationListener{
         mainMenu.addButton(new Button(60, 256 - 171, 178 - 60, 171 - 156, true){
 			public void react(LibgdxTest model) {
 				Log.d("Button", "Scores");
+				currentMenu = scoresMenu;
 			}
         });
         /*
@@ -434,6 +441,8 @@ public class LibgdxTest implements ApplicationListener{
 		}
 		
 		this.levelNum = levelNum;
+		
+		player.launchMode = true;
 		
 		return true;
 	}
