@@ -3,7 +3,7 @@ package android.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-public class Player extends Sprite{
+public class Player extends AnimationSprite{
 
 	Vector3D p, v, a;
 	
@@ -18,7 +18,24 @@ public class Player extends Sprite{
 	int maxLaunchModeCoolDown = 20;
 	
 	public Player() {
-		super("cat.png");
+		super("cat1.png", 1);
+		addFrame(new Sprite("cat2.png"));
+		addFrame(new Sprite("cat3.png"));
+		addFrame(new Sprite("cat4.png"));
+		addFrame(new Sprite("cat5.png"));
+		addFrame(new Sprite("cat6.png"));
+		addFrame(new Sprite("cat7.png"));
+		addFrame(new Sprite("cat8.png"));
+		addFrame(new Sprite("cat9.png"));
+		addFrame(new Sprite("cat10.png"));
+		addFrame(new Sprite("cat9.png"));
+		addFrame(new Sprite("cat8.png"));
+		addFrame(new Sprite("cat7.png"));
+		addFrame(new Sprite("cat6.png"));
+		addFrame(new Sprite("cat5.png"));
+		addFrame(new Sprite("cat4.png"));
+		addFrame(new Sprite("cat3.png"));
+		addFrame(new Sprite("cat2.png"));
 		v = new Vector3D();
         p = new Vector3D();
         a = new Vector3D();

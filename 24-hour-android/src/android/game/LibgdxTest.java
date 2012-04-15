@@ -264,8 +264,8 @@ public class LibgdxTest implements ApplicationListener{
 		}
 		
 		particleSources.add(new ParticleSource(30, 2, 1, new Vector3D(0, 0, 0), new Vector3D(player.x + player.width/2, player.y + player.height/2, 0), 15, "red.png"));
-	
-		menuButton.draw(batch, 0, 0);
+		
+		player.draw(batch, x, y, (int) win.p.getX(), (int) win.p.getY());
 		
 		int i = 0;
 		while (i < particleSources.size()) {
@@ -276,11 +276,11 @@ public class LibgdxTest implements ApplicationListener{
 			}
 		}
 		
+		menuButton.draw(batch, 0, 0);
+		
 		fuel.width = (int) (Gdx.graphics.getWidth() * player.fuel / player.maxFuel);
 		fuel.x = (int) ((Gdx.graphics.getWidth() - fuel.width) / 2);
 		fuel.draw(batch, 0, 0);
-		
-		player.draw(batch, x, y, (int) win.p.getX(), (int) win.p.getY());
 		
 		batch.end();
 		
