@@ -1,5 +1,5 @@
 player 0 0
 win 500 500 200 10000
-hostile 100 200 50 2000
+blackhole 100 200 50 2000
 friendly 200 100 70 1000
 neutral 500 0 90 4000
