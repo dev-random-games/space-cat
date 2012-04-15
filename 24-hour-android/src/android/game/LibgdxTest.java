@@ -15,9 +15,12 @@ import com.badlogic.gdx.Audio;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.BitmapFont.HAlignment;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -77,6 +80,10 @@ public class LibgdxTest implements ApplicationListener{
 	Sprite menuButton;
 	
 	BitmapFont terminus;
+	
+	private TextureAtlas atlas;
+    private BitmapFont font;
+    
 
 	public void create() {	
 		
@@ -208,6 +215,9 @@ public class LibgdxTest implements ApplicationListener{
 				currentMenu = mainMenu;
 			}
         });
+        atlas = new TextureAtlas("data/pack");
+        font = new BitmapFont(Gdx.files.internal("data/verdana39.fnt"), atlas.findRegion("verdana39"), false);
+        font.setColor(Color.RED);
 	}
 
 	public void render() {
@@ -248,6 +258,8 @@ public class LibgdxTest implements ApplicationListener{
 		Rectangle window = new Rectangle(x, y, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 			
 		batch.begin();
+		
+		font.drawWrapped(batch, "herp derp testing", 20, 20, 280, HAlignment.RIGHT);
 		
 		bg.draw(batch, x / 2, y / 2);
 
