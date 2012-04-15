@@ -12,7 +12,7 @@ public class Controller implements GestureListener{
 	Vector3D touchSpot;
 	
 	int launchScale = 500;
-	int fuelScale = 500;
+	int fuelScale = 5000;
 
 	@Override
 	public boolean fling(float vX, float vY) {
@@ -25,9 +25,7 @@ public class Controller implements GestureListener{
 			model.player.launchMode = false;
 		} else {
 			if (model.player.fuel > 0){
-				Vector3D a = new Vector3D(vX / fuelScale, vY / fuelScale, 0);
-				model.player.fuel -= a.length() * 5;
-				model.player.v = model.player.v.add(a);
+				model.player.a = new Vector3D(vX / fuelScale, vY / fuelScale, 0);
 			} else {
 				model.player.fuel = 0;
 			}

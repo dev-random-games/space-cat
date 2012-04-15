@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class Player extends Sprite{
 
-	Vector3D p, v;
+	Vector3D p, v, a;
 	
 	double fuel;
 	double maxFuel = 500;
@@ -18,11 +18,19 @@ public class Player extends Sprite{
 		super("cat.png");
 		v = new Vector3D();
         p = new Vector3D();
+        a = new Vector3D();
         
         fuel = maxFuel;
 	}
 	
 	public void move(){
+		if (fuel > 0){
+		a = a.scale(.9);
+		fuel -= a.length() * 5;
+		} else {
+			fuel = 0;
+		}
+		v = v.add(a);
 		p = p.add(v);
 		launchModeCoolDown -= 1;
 	}
