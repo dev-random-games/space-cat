@@ -47,6 +47,7 @@ public class LibgdxTest implements ApplicationListener{
 	
 	boolean menuMode = true;
 	Menu currentMenu;
+	Menu herpMenu;
 
 	public void create() {	
 		
@@ -94,13 +95,14 @@ public class LibgdxTest implements ApplicationListener{
         
         bg = new TiledSprite("starbg.png");
         
-        currentMenu = new Menu("menu.png");
-        currentMenu.addButton(new Button(200, 100, 300, 100, true){
+        herpMenu = new Menu("menu.png");
+        herpMenu.addButton(new Button(200, 100, 300, 100, true){
         	public void react(LibgdxTest model){
         		Log.d("LibgdxTest", "Button pressed!");
         		model.menuMode = false;
         	}
         });
+        currentMenu = herpMenu;
 	}
 
 	public void render() {

@@ -26,6 +26,7 @@ public class Player extends Sprite{
         
         arrow = new Sprite("pointer.png");
         arrow.rotCenter = false;
+        arrow.width = arrow.height = 60;
 	}
 	
 	public void move(){
@@ -44,10 +45,10 @@ public class Player extends Sprite{
 		x = p.getX();
 		y = p.getY();
 		
-		Vector3D toWin = new Vector3D(winX - x, winY - y, 0);
+		Vector3D toWin = new Vector3D(winX - x, winY - y, 0).normalize();
 		arrow.rotation = - 360 * Math.atan2(toWin.getX(), toWin.getY()) / (2 * Math.PI) + 45;
-		arrow.x = p.getX() + width / 2;
-		arrow.y = p.getY() + height / 2;
+		arrow.x = p.getX() + width / 2 + toWin.getX() * 100;
+		arrow.y = p.getY() + height / 2 + toWin.getY() * 100;
 		arrow.draw(batch, dx, dy);
 		
 		rotation = - 360 * Math.atan2(v.getX(), v.getY()) / (2 * Math.PI);
