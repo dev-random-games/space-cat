@@ -179,8 +179,6 @@ public class LibgdxTest implements ApplicationListener{
 		
 		planets = new ArrayList<Planet>();
 		
-		player = new Player();
-		
 		Random random = new Random();
 		
 		try {
@@ -192,7 +190,13 @@ public class LibgdxTest implements ApplicationListener{
 				
 				Log.v("LibgdxTest", line);
 				
-				if (elements[0].equals("win")){
+				if (elements[0].equals("player")) {
+					player = new Player();
+					player.p = new Vector3D(Integer.parseInt(elements[1]),
+											Integer.parseInt(elements[2]),
+											0);
+					continue;
+				} else if (elements[0].equals("win")){
 					type = Planet.type.WIN;
 					filename = "earth.png";
 				} else if (elements[0].equals("friendly")){
