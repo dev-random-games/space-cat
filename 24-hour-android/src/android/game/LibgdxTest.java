@@ -51,11 +51,18 @@ public class LibgdxTest implements ApplicationListener{
 	static Music thbb0;
 	static Music thbb1;
 	
+	static Music bgMusic;
+	static Music menuMusic;
+	static Music happyMeow;
+	static Music sadMeow;
+	static Music lostMeow;
+	
 	int levelEndWait = 0;
 	int maxLevelEndWait = 70;
 	String doWhatAfterWait;
 	
 	Sprite fuel;
+	Sprite fuelLow;
 	
 	Camera camera;
 	
@@ -112,11 +119,26 @@ public class LibgdxTest implements ApplicationListener{
         meow2 = audio.newMusic(Gdx.files.internal("sound/meow-2.ogg"));
         thbb0 = audio.newMusic(Gdx.files.internal("sound/thhhbbb-1.ogg"));
         thbb1 = audio.newMusic(Gdx.files.internal("sound/thhhbbb-3.ogg"));
+        
+        bgMusic =   audio.newMusic(Gdx.files.internal("sound/3-1_final.ogg"));
+        menuMusic = audio.newMusic(Gdx.files.internal("sound/blue_danube_hardcore.ogg"));
+    	happyMeow = audio.newMusic(Gdx.files.internal("sound/happy_meow_0.ogg"));
+    	sadMeow =   audio.newMusic(Gdx.files.internal("sound/sad_meow_0.ogg"));
+    	lostMeow =  audio.newMusic(Gdx.files.internal("sound/lost_meow_0.ogg"));
+    	bgMusic.setLooping(true);
+    	menuMusic.setLooping(true);
+    	bgMusic.setVolume(.3f);
         //bambi.setLooping(true);
       
         fuel = new Sprite("fuelbar.png");
         fuel.height = 15;
         fuel.width = Gdx.graphics.getWidth();
+        
+        fuelLow = new Sprite("fuelLow.png");
+        fuelLow.width *= 3;
+        fuelLow.height *= 3;
+        fuelLow.x = Gdx.graphics.getWidth() / 2 - fuelLow.width / 2;
+        fuelLow.y = 15;
         
         glowR = new Sprite("redGlow.png", 100, 100);
         glowG = new Sprite("greenGlow.png", 200, 200);
@@ -215,26 +237,33 @@ public class LibgdxTest implements ApplicationListener{
 				currentMenu = mainMenu;
 			}
         });
-        atlas = new TextureAtlas("data/pack");
-        font = new BitmapFont(Gdx.files.internal("data/verdana39.fnt"), atlas.findRegion("verdana39"), false);
-        font.setColor(Color.RED);
+//        atlas = new TextureAtlas("data/pack");
+//        font = new BitmapFont(Gdx.files.internal("data/verdana39.fnt"), atlas.findRegion("verdana39"), false);
+//        font.setColor(Color.RED);
 	}
 
 	public void render() {
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		
 		if (!menuMode){
+			if (!bgMusic.isPlaying()){
+				bgMusic.play();
+				menuMusic.stop();
+			}
+			
 			if (levelEndWait <= 0){
 				if (!player.launchMode){
 					player.move();
 					for (Planet planet : planets){
 						int response = player.influence(planet);
 						if (response == 1){
+							LibgdxTest.happyMeow.play();
 							levelEndWait = maxLevelEndWait;
 							doWhatAfterWait = "nextlevel";
 							particleSources.add(new ParticleSource(150, 100, 2, new Vector3D(0, 0, 0), new Vector3D(player.x + player.width/2, player.y + player.height/2, 0), 40, "spark_3.png"));
 						} else if (response == 2){
 							//loadLevel(levelNum);
+							LibgdxTest.lostMeow.play();
 							levelEndWait = maxLevelEndWait;
 							doWhatAfterWait = "restartlevel";
 							particleSources.add(new ParticleSource(150, 100, 2, new Vector3D(0, 0, 0), new Vector3D(player.x + player.width/2, player.y + player.height/2, 0), 40, "spark_4.png"));
@@ -253,13 +282,18 @@ public class LibgdxTest implements ApplicationListener{
 			} else {
 				levelEndWait --;
 			}
+		} else {
+			if (!menuMusic.isPlaying()){
+				bgMusic.stop();
+				menuMusic.play();
+			}
 		}
 		
 		Rectangle window = new Rectangle(x, y, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 			
 		batch.begin();
 		
-		font.drawWrapped(batch, "herp derp testing", 20, 20, 280, HAlignment.RIGHT);
+//		font.drawWrapped(batch, "herp derp testing", 20, 20, 280, HAlignment.RIGHT);
 		
 		bg.draw(batch, x / 2, y / 2);
 
@@ -325,6 +359,10 @@ public class LibgdxTest implements ApplicationListener{
 		fuel.width = (int) (Gdx.graphics.getWidth() * player.fuel / player.maxFuel);
 		fuel.x = (int) ((Gdx.graphics.getWidth() - fuel.width) / 2);
 		fuel.draw(batch, 0, 0);
+		
+		if (player.fuel < player.maxFuel / 3){
+			fuelLow.draw(batch, 0, 0);
+		}
 		
 		batch.end();
 		

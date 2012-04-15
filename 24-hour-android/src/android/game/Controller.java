@@ -28,27 +28,24 @@ public class Controller implements GestureListener{
 			if (model.player.launchMode){
 				model.player.v = new Vector3D(vX / launchScale, vY / launchScale, 0);
 				model.player.launchMode = false;
+				
+				LibgdxTest.sadMeow.play();
+				
 			} else {
 				if (model.player.fuel > 0){
 					model.player.a = new Vector3D(vX / fuelScale, vY / fuelScale, 0);
 					
 					Random random = new Random();
 					
-					switch (random.nextInt(5)){
+					switch (random.nextInt(3)){
 					case 0:
-						LibgdxTest.fart0.play();
+						
 						break;
 					case 1:
-						LibgdxTest.fart1.play();
+						LibgdxTest.meow1.play();
 						break;
 					case 2:
-						LibgdxTest.fart2.play();
-						break;
-					case 3:
-						LibgdxTest.thbb0.play();
-						break;
-					case 4:
-						LibgdxTest.thbb1.play();
+						LibgdxTest.meow2.play();
 						break;
 					default:
 						break;
