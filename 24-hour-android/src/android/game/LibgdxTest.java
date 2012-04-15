@@ -48,6 +48,7 @@ public class LibgdxTest implements ApplicationListener{
 	boolean menuMode = true;
 	Menu currentMenu;
 	Menu herpMenu;
+	Menu levelMenu;
 
 	public void create() {	
 		
@@ -81,7 +82,7 @@ public class LibgdxTest implements ApplicationListener{
 //        	planets.add(new Planet(planet, new Vector3D(random.nextInt(1000), random.nextInt(1000), 0), random.nextInt(scale) * .05 + 20, 0, random.nextDouble() * 360));
 //        }
 
-        loadLevels("levels", 1);
+        loadLevel(1);
         
         audio = Gdx.audio;
         bambi = audio.newMusic(Gdx.files.internal("bambi.ogg"));
@@ -103,6 +104,18 @@ public class LibgdxTest implements ApplicationListener{
         	}
         });
         currentMenu = herpMenu;
+        
+        levelMenu = new Menu("levelmenu.png");
+        currentMenu = levelMenu;
+        levelMenu.addButton(new LevelButton(17, 64 - 18 - 10, 10, 10, true, 1));
+        levelMenu.addButton(new LevelButton(28, 64 - 18 - 10, 10, 10, true, 2));
+        levelMenu.addButton(new LevelButton(39, 64 - 18 - 10, 10, 10, true, 3));
+        levelMenu.addButton(new LevelButton(17, 64 - 29 - 10, 10, 10, true, 4));
+        levelMenu.addButton(new LevelButton(28, 64 - 29 - 10, 10, 10, true, 5));
+        levelMenu.addButton(new LevelButton(39, 64 - 29 - 10, 10, 10, true, 6));
+        levelMenu.addButton(new LevelButton(17, 64 - 40 - 10, 10, 10, true, 7));
+        levelMenu.addButton(new LevelButton(28, 64 - 40 - 10, 10, 10, true, 8));
+        levelMenu.addButton(new LevelButton(39, 64 - 40 - 10, 10, 10, true, 9));
 	}
 
 	public void render() {
@@ -114,9 +127,9 @@ public class LibgdxTest implements ApplicationListener{
 				for (Planet planet : planets){
 					int response = player.influence(planet);
 					if (response == 1){
-						loadLevels(levels, levelNum + 1);
+						loadLevel(levelNum + 1);
 					} else if (response == 2){
-						loadLevels(levels, levelNum);
+						loadLevel(levelNum);
 					}
 				}
 			}
@@ -124,7 +137,7 @@ public class LibgdxTest implements ApplicationListener{
 			
 		batch.begin();
 		
-		bg.draw(batch, x, y);
+		bg.draw(batch, x / 2, y / 2);
 
 		this.camera.update(player);
 		x = (int) camera.loc.getX();
@@ -182,8 +195,8 @@ public class LibgdxTest implements ApplicationListener{
 	/*
 	 * Load a series of levels
 	 */
-	public boolean loadLevels(String levelsList, int levelNum){
-		FileHandle file = Gdx.files.internal(levelsList);
+	public boolean loadLevel(int levelNum){
+		FileHandle file = Gdx.files.internal(levels);
 		BufferedReader reader = new BufferedReader(file.reader());
 		
 		try {
@@ -214,6 +227,8 @@ public class LibgdxTest implements ApplicationListener{
 		planets = new ArrayList<Planet>();
 		
 		Random random = new Random();
+		
+		player.launchMode = true;
 		
 		try {
 			while ((line = reader.readLine()) != null){
