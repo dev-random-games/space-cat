@@ -7,8 +7,6 @@ import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Audio;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.input.GestureDetector;
@@ -50,7 +48,16 @@ public class LibgdxTest implements ApplicationListener{
         
         Random random = new Random();
         for (int i = 0; i < 20; i++){
-        	planets.add(new Planet("sun.png", new Vector3D(random.nextInt(5000), random.nextInt(5000), 0), random.nextInt(500)));
+        	int planetDecide = random.nextInt(100);
+        	String planet;
+        	if (planetDecide > 50){
+        		planet = "sun.png";
+        	} else if (planetDecide > 25){
+        		planet = "neptune.png";
+        	} else {
+        		planet = "mars.png";
+        	}
+        	planets.add(new Planet(planet, new Vector3D(random.nextInt(5000), random.nextInt(5000), 0), random.nextInt(500)));
         }
         
         menuBar = new Sprite("menubar.png");
