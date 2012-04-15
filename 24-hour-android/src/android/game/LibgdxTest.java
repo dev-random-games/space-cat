@@ -51,6 +51,7 @@ public class LibgdxTest implements ApplicationListener{
 	Menu herpMenu;
 	Menu levelMenu;
 	Menu mainMenu;
+	Menu creditsMenu;
 	
 	Sprite glowG, glowR, glowB;
 
@@ -154,9 +155,21 @@ public class LibgdxTest implements ApplicationListener{
         mainMenu.addButton(new Button(60, 256 - 197, 178 - 60, 197 - 183, true){
 			public void react(LibgdxTest model) {
 				Log.d("Button", "Credits");
+				currentMenu = creditsMenu;
 			}
         });
         currentMenu = mainMenu;
+        
+        creditsMenu = new Menu("credits.png");
+        /*
+         * Credits
+         */
+        creditsMenu.addButton(new Button(60, 256 - 197, 178 - 60, 197 - 183, true){
+			public void react(LibgdxTest model) {
+				Log.d("Button", "BACK");
+				currentMenu = mainMenu;
+			}
+        });
 	}
 
 	public void render() {
@@ -209,6 +222,11 @@ public class LibgdxTest implements ApplicationListener{
 					glowR.x = position.getX() - glowR.width / 2;
 					glowR.y = position.getY() - glowR.height / 2;
 					glowR.draw(batch, x, y);
+				} else if (planet.t == Planet.type.FRIENDLY){
+					position = position.add(toPlanet.scale(1 / 30));
+					glowB.x = position.getX() - glowB.width / 2;
+					glowB.y = position.getY() - glowB.height / 2;
+					glowB.draw(batch, x, y);
 				}
 			
 			}

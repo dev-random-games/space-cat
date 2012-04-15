@@ -10,7 +10,7 @@ public class Player extends Sprite{
 	Sprite arrow;
 	
 	double fuel;
-	double maxFuel = 500;
+	double maxFuel = 200;
 	boolean refill = false;
 	
 	boolean launchMode = true;
