@@ -1,5 +1,7 @@
 package android.game;
 
+import java.util.Random;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.input.GestureDetector.GestureListener;
 import com.badlogic.gdx.math.Rectangle;
@@ -19,7 +21,6 @@ public class Controller implements GestureListener{
 
 	@Override
 	public boolean fling(float vX, float vY) {
-//		LibgdxTest.bambi.play();
 		
 		vY = -vY;
 		
@@ -30,6 +31,29 @@ public class Controller implements GestureListener{
 			} else {
 				if (model.player.fuel > 0){
 					model.player.a = new Vector3D(vX / fuelScale, vY / fuelScale, 0);
+					
+					Random random = new Random();
+					
+					switch (random.nextInt(5)){
+					case 0:
+						LibgdxTest.fart0.play();
+						break;
+					case 1:
+						LibgdxTest.fart1.play();
+						break;
+					case 2:
+						LibgdxTest.fart2.play();
+						break;
+					case 3:
+						LibgdxTest.thbb0.play();
+						break;
+					case 4:
+						LibgdxTest.thbb1.play();
+						break;
+					default:
+						break;
+					}
+					
 				} else {
 					model.player.fuel = 0;
 				}
