@@ -74,8 +74,6 @@ public class LibgdxTest implements ApplicationListener{
 		
 		particleSources = new ArrayList<ParticleSource>();
 		
-		//particleSources.add(new ParticleSource(30, 3, 1, new Vector3D(.1, .1, 0), new Vector3D(0, 0, 0), 20, "spark_0.png"));
-		
 		stage = new Stage(0, 0, true);
 		batch = new SpriteBatch();
 		
