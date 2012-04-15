@@ -37,6 +37,9 @@ public class LibgdxTest implements ApplicationListener{
 	Audio audio;
 	static Music bambi;
 	
+	int levelEndWait = 0;
+	int maxLevelEndWait = 100;
+	
 	Sprite fuel;
 	
 	Camera camera;
@@ -67,7 +70,7 @@ public class LibgdxTest implements ApplicationListener{
 		
 		particleSources = new ArrayList<ParticleSource>();
 		
-		particleSources.add(new ParticleSource(100, 10, 0, new Vector3D(.1, .1, 0), new Vector3D(0, 0, 0), 20, "red.png"));
+//		particleSources.add(new ParticleSource(100, 10, 0, new Vector3D(.1, .1, 0), new Vector3D(0, 0, 0), 20, "red.png"));
 		
 		stage = new Stage(0, 0, true);
 		batch = new SpriteBatch();
@@ -194,16 +197,23 @@ public class LibgdxTest implements ApplicationListener{
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		
 		if (!menuMode){
-			if (!player.launchMode){
-				player.move();
-				for (Planet planet : planets){
-					int response = player.influence(planet);
-					if (response == 1){
-						loadLevel(levelNum + 1);
-					} else if (response == 2){
-						loadLevel(levelNum);
+			if (levelEndWait <= 0){
+				if (!player.launchMode){
+					player.move();
+					for (Planet planet : planets){
+						int response = player.influence(planet);
+						if (response == 1){
+							levelEndWait = maxLevelEndWait;
+						} else if (response == 2){
+							loadLevel(levelNum);
+						}
 					}
 				}
+			} else if (levelEndWait == 1){
+				levelEndWait = 0;
+				loadLevel(levelNum + 1);
+			} else {
+				levelEndWait --;
 			}
 		}
 		
@@ -248,7 +258,7 @@ public class LibgdxTest implements ApplicationListener{
 		}
 		
 		player.draw(batch, x, y, (int) win.p.getX(), (int) win.p.getY());
-		particleSources.add(new ParticleSource(30, 10, 3, new Vector3D(0, 0, 0), new Vector3D(player.x + player.width/2, player.y + player.height/2, 0), 20, "red.png"));
+		particleSources.add(new ParticleSource(100, 2, 0, new Vector3D(0, 0, 0), new Vector3D(player.x + player.width/2, player.y + player.height/2, 0), 20, "red.png"));
 		
 		fuel.width = (int) (Gdx.graphics.getWidth() * player.fuel / player.maxFuel);
 		fuel.x = (int) ((Gdx.graphics.getWidth() - fuel.width) / 2);
