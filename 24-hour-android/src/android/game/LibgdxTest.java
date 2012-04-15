@@ -94,10 +94,10 @@ public class LibgdxTest implements ApplicationListener{
         fuel.height = 15;
         fuel.width = Gdx.graphics.getWidth();
         
-        glowR = new Sprite("redGlow.png");
-        glowG = new Sprite("greenGlow.png");
-        glowG.width = glowG.height = 500;
-        glowB = new Sprite("blueGlow.png");
+        glowR = new Sprite("redGlow.png", 200, 200);
+        glowG = new Sprite("greenGlow.png", 300, 300);
+        //glowG.width = glowG.height = 500;
+        glowB = new Sprite("blueGlow.png", 200, 200);
 
         this.camera = new Camera(this.player);
         
@@ -243,6 +243,7 @@ public class LibgdxTest implements ApplicationListener{
 				glowG.x = position.getX() - glowG.width / 2;
 				glowG.y = position.getY() - glowG.height / 2;
 				glowG.draw(batch, x, y);
+				//batch.draw(texture, (int) x - dx, (int) y - dy, width / 2, height / 2, width, height, 1, 1, (float) rotation);
 			} else if (toPlanet.length() < Math.sqrt(Gdx.graphics.getWidth() * Gdx.graphics.getHeight()) && !window.contains((float) planet.x, (float) planet.y)){
 				if (planet.t == Planet.type.HOSTILE){
 					position = position.add(toPlanet.scale(1 / 30));
