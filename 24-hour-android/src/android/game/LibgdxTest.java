@@ -22,6 +22,7 @@ import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
+
 public class LibgdxTest implements ApplicationListener{
 	
 	private Stage stage;
@@ -38,7 +39,7 @@ public class LibgdxTest implements ApplicationListener{
 	static Music bambi;
 	
 	int levelEndWait = 0;
-	int maxLevelEndWait = 100;
+	int maxLevelEndWait = 80;
 	
 	Sprite fuel;
 	
@@ -70,7 +71,7 @@ public class LibgdxTest implements ApplicationListener{
 		
 		particleSources = new ArrayList<ParticleSource>();
 		
-//		particleSources.add(new ParticleSource(100, 10, 0, new Vector3D(.1, .1, 0), new Vector3D(0, 0, 0), 20, "red.png"));
+		//particleSources.add(new ParticleSource(30, 3, 1, new Vector3D(.1, .1, 0), new Vector3D(0, 0, 0), 20, "spark_0.png"));
 		
 		stage = new Stage(0, 0, true);
 		batch = new SpriteBatch();
@@ -204,6 +205,7 @@ public class LibgdxTest implements ApplicationListener{
 						int response = player.influence(planet);
 						if (response == 1){
 							levelEndWait = maxLevelEndWait;
+							particleSources.add(new ParticleSource(200, 100, 2, new Vector3D(0, 0, 0), new Vector3D(player.x + player.width/2, player.y + player.height/2, 0), 40, "confetti_3.png"));
 						} else if (response == 2){
 							loadLevel(levelNum);
 						}
@@ -257,13 +259,8 @@ public class LibgdxTest implements ApplicationListener{
 			}
 		}
 		
-		player.draw(batch, x, y, (int) win.p.getX(), (int) win.p.getY());
-		particleSources.add(new ParticleSource(100, 2, 0, new Vector3D(0, 0, 0), new Vector3D(player.x + player.width/2, player.y + player.height/2, 0), 20, "red.png"));
-		
-		fuel.width = (int) (Gdx.graphics.getWidth() * player.fuel / player.maxFuel);
-		fuel.x = (int) ((Gdx.graphics.getWidth() - fuel.width) / 2);
-		fuel.draw(batch, 0, 0);
-		
+		particleSources.add(new ParticleSource(30, 2, 1, new Vector3D(0, 0, 0), new Vector3D(player.x + player.width/2, player.y + player.height/2, 0), 15, "red.png"));
+	
 		menuButton.draw(batch, 0, 0);
 		
 		int i = 0;
@@ -274,6 +271,12 @@ public class LibgdxTest implements ApplicationListener{
 				particleSources.remove(i);
 			}
 		}
+		
+		fuel.width = (int) (Gdx.graphics.getWidth() * player.fuel / player.maxFuel);
+		fuel.x = (int) ((Gdx.graphics.getWidth() - fuel.width) / 2);
+		fuel.draw(batch, 0, 0);
+		
+		player.draw(batch, x, y, (int) win.p.getX(), (int) win.p.getY());
 		
 		batch.end();
 		
