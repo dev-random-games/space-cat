@@ -174,6 +174,8 @@ public class LibgdxTest implements ApplicationListener{
 		
 		player = new Player();
 		
+		Random random = new Random();
+		
 		try {
 			while ((line = reader.readLine()) != null){
 				String[] elements = line.split(" ");
@@ -202,7 +204,7 @@ public class LibgdxTest implements ApplicationListener{
 				r = Integer.parseInt(elements[3]);
 				m = Integer.parseInt(elements[4]);
 				
-				planets.add(new Planet(filename, type, new Vector3D(x, y, 0), r, m));
+				planets.add(new Planet(filename, type, new Vector3D(x, y, 0), r, m, random.nextDouble() * 360));
 			}
 		} catch (IOException e) {
 			Log.e("LibgdxTest", "Failed to load level " + levelName);
