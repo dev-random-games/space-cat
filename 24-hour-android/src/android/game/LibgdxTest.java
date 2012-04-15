@@ -89,6 +89,11 @@ public class LibgdxTest implements ApplicationListener{
         
         levelMenu = new Menu("levelmenu.png");
         currentMenu = levelMenu;
+        levelMenu.addButton(new Button(28, 64 - 5 - 10, 10, 10, true){
+        	public void react(LibgdxTest model){
+        		model.currentMenu = model.mainMenu;
+        	}
+        });
         levelMenu.addButton(new LevelButton(17, 64 - 18 - 10, 10, 10, true, 1));
         levelMenu.addButton(new LevelButton(28, 64 - 18 - 10, 10, 10, true, 2));
         levelMenu.addButton(new LevelButton(39, 64 - 18 - 10, 10, 10, true, 3));
@@ -106,7 +111,7 @@ public class LibgdxTest implements ApplicationListener{
         mainMenu.addButton(new Button(35, 256 - 90, 175 - 35, 90 - 75, true){
 			public void react(LibgdxTest model) {
 				Log.d("Button", "Start Game");
-				menuMode = false;
+				model.menuMode = false;
 				loadLevel(1);
 			}
         });
@@ -124,6 +129,7 @@ public class LibgdxTest implements ApplicationListener{
         mainMenu.addButton(new Button(60, 256 - 146, 178 - 60, 146 - 129, true){
 			public void react(LibgdxTest model) {
 				Log.d("Button", "Levels");
+				model.currentMenu = model.levelMenu;
 			}
         });
         /*
