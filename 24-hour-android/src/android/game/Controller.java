@@ -97,6 +97,7 @@ public class Controller implements GestureListener{
 		
 		if (model.menuButton.intersects(new Rectangle(x - 5, y - 5, 10, 10))){
 			model.menuMode = true;
+			model.currentMenu = model.mainMenu;
 		}
 		
 		return false;
