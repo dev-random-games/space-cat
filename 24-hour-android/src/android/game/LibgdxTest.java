@@ -49,7 +49,8 @@ public class LibgdxTest implements ApplicationListener{
 	static Music thbb1;
 	
 	int levelEndWait = 0;
-	int maxLevelEndWait = 80;
+	int maxLevelEndWait = 70;
+	String doWhatAfterWait;
 	
 	Sprite fuel;
 	
@@ -220,15 +221,25 @@ public class LibgdxTest implements ApplicationListener{
 						int response = player.influence(planet);
 						if (response == 1){
 							levelEndWait = maxLevelEndWait;
-							particleSources.add(new ParticleSource(200, 100, 2, new Vector3D(0, 0, 0), new Vector3D(player.x + player.width/2, player.y + player.height/2, 0), 40, "confetti_3.png"));
+							doWhatAfterWait = "nextlevel";
+							particleSources.add(new ParticleSource(150, 100, 2, new Vector3D(0, 0, 0), new Vector3D(player.x + player.width/2, player.y + player.height/2, 0), 40, "spark_3.png"));
 						} else if (response == 2){
-							loadLevel(levelNum);
+							//loadLevel(levelNum);
+							levelEndWait = maxLevelEndWait;
+							doWhatAfterWait = "restartlevel";
+							particleSources.add(new ParticleSource(150, 100, 2, new Vector3D(0, 0, 0), new Vector3D(player.x + player.width/2, player.y + player.height/2, 0), 40, "spark_4.png"));
+						} else if (response == 3){
+							particleSources.add(new ParticleSource(150, 100, 2, new Vector3D(0, 0, 0), new Vector3D(player.x + player.width/2, player.y + player.height/2, 0), 40, "confetti_3.png"));
 						}
 					}
 				}
 			} else if (levelEndWait == 1){
 				levelEndWait = 0;
-				loadLevel(levelNum + 1);
+				if (doWhatAfterWait == "nextlevel") {
+					loadLevel(levelNum + 1);
+				} else if (doWhatAfterWait == "restartlevel") {
+					loadLevel(levelNum);
+				}
 			} else {
 				levelEndWait --;
 			}
@@ -278,7 +289,7 @@ public class LibgdxTest implements ApplicationListener{
 			}
 		}
 		
-		if (!player.launchMode){
+		if ((!player.launchMode) && (levelEndWait == 0)){
 			particleSources.add(new ParticleSource(30, 2, 1, new Vector3D(0, 0, 0), new Vector3D(player.x + player.width/2, player.y + player.height/2, 0), 15, "red.png"));
 		}
 		
