@@ -6,6 +6,7 @@ public class Planet extends Sprite {
 	Vector3D p;
 	double r;
 	double m;
+	type t = type.NEUTRAL;
 	
 	enum type{
 		WIN,
@@ -35,6 +36,14 @@ public class Planet extends Sprite {
 		this.p = position;
 		this.r = radius;
 		this.m = mass == 0 ? Math.PI * radius * radius / 50 : mass;
+	}
+		
+	public Planet(String filename, type t, Vector3D position, double radius, double mass) {
+		super(filename);
+		this.p = position;
+		this.r = radius;
+		this.m = mass;
+		this.t = t;
 	}
 	
 	public void draw(SpriteBatch batch, int dx, int dy){
