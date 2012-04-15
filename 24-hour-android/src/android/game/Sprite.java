@@ -25,6 +25,15 @@ public class Sprite {
 		height = imgHeight;
 	}
 	
+	public Sprite (String filename, double rotation) {
+		texture = new TextureRegion(new Texture(Gdx.files.internal(filename)));
+		imgWidth = texture.getRegionWidth();
+		imgHeight = texture.getRegionHeight();
+		width = imgWidth;
+		height = imgHeight;
+		this.rotation = rotation;
+	}
+	
 	public void draw(SpriteBatch batch, int dx, int dy){
 		batch.draw(texture, (int) x - dx, (int) y - dy, width / 2, height / 2, width, height, 1, 1, (float) rotation);
 	}

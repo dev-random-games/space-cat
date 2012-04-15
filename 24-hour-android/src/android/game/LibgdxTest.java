@@ -47,8 +47,10 @@ public class LibgdxTest implements ApplicationListener{
         /*
          * Creates planets
          */
+        int scale = 750;
         Random random = new Random();
-        for (int i = 0; i < 20; i++){
+    	planets.add(new Planet("earth.png", new Vector3D(random.nextInt(1000), random.nextInt(1000), 0), random.nextInt(scale) * .1 + 20, 0, random.nextDouble() * 360));
+        for (int i = 0; i < 5; i++){
         	int planetDecide = random.nextInt(100);
         	String planet;
         	if (planetDecide > 50){
@@ -58,7 +60,7 @@ public class LibgdxTest implements ApplicationListener{
         	} else {
         		planet = "mars.png";
         	}
-        	planets.add(new Planet(planet, new Vector3D(random.nextInt(5000), random.nextInt(5000), 0), random.nextInt(500)));
+        	planets.add(new Planet(planet, new Vector3D(random.nextInt(1000), random.nextInt(1000), 0), random.nextInt(scale) * .05 + 20, 0, random.nextDouble() * 360));
         }
         
         audio = Gdx.audio;
