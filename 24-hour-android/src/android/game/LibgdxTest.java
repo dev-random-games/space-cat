@@ -130,7 +130,7 @@ public class LibgdxTest implements ApplicationListener{
 		x = (int) camera.loc.getX();
 		y = (int) camera.loc.getY();
 		
-		br = 
+		
 		for (Planet planet : planets){
 			planet.draw(batch, x, y);
 			
