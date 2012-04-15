@@ -57,7 +57,7 @@ public class LibgdxTest implements ApplicationListener{
 		
 		particleSources = new ArrayList<ParticleSource>();
 		
-		particleSources.add(new ParticleSource(100, 10, 0, new Vector3D(.1, .1, 0), new Vector3D(0, 0, 0), 20, "red.png"));
+		//particleSources.add(new ParticleSource(100, 10, 0, new Vector3D(.1, .1, 0), new Vector3D(0, 0, 0), 20, "red.png"));
 		
 		stage = new Stage(0, 0, true);
 		batch = new SpriteBatch();
@@ -166,7 +166,8 @@ public class LibgdxTest implements ApplicationListener{
 				for (Planet planet : planets){
 					int response = player.influence(planet);
 					if (response == 1){
-						loadLevel(levelNum + 1);
+						particleSources.add(new ParticleSource(75, 50, 5, new Vector3D(0, 0, 0), new Vector3D(player.x, player.y, 0), 20, "confetti_0.png"));
+						//loadLevel(levelNum + 1);
 					} else if (response == 2){
 						loadLevel(levelNum);
 					}
