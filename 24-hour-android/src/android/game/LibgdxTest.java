@@ -48,6 +48,8 @@ public class LibgdxTest implements ApplicationListener{
 	
 	TiledSprite bg;
 	
+	ArrayList<ParticleSource> particleSources;
+	
 	boolean menuMode = true;
 	Menu currentMenu;
 	Menu herpMenu;
@@ -62,6 +64,10 @@ public class LibgdxTest implements ApplicationListener{
 	BitmapFont terminus;
 
 	public void create() {	
+		
+		particleSources = new ArrayList<ParticleSource>();
+		
+		particleSources.add(new ParticleSource(100, 10, 0, new Vector3D(.1, .1, 0), new Vector3D(0, 0, 0), 20, "red.png"));
 		
 		stage = new Stage(0, 0, true);
 		batch = new SpriteBatch();
@@ -211,11 +217,8 @@ public class LibgdxTest implements ApplicationListener{
 		x = (int) camera.loc.getX();
 		y = (int) camera.loc.getY();
 		
-		
 		for (Planet planet : planets){
 			planet.draw(batch, x, y);
-			
-			
 			
 		}
 		
@@ -245,12 +248,22 @@ public class LibgdxTest implements ApplicationListener{
 		}
 		
 		player.draw(batch, x, y, (int) win.p.getX(), (int) win.p.getY());
+		particleSources.add(new ParticleSource(30, 10, 3, new Vector3D(0, 0, 0), new Vector3D(player.x + player.width/2, player.y + player.height/2, 0), 20, "red.png"));
 		
 		fuel.width = (int) (Gdx.graphics.getWidth() * player.fuel / player.maxFuel);
 		fuel.x = (int) ((Gdx.graphics.getWidth() - fuel.width) / 2);
 		fuel.draw(batch, 0, 0);
 		
 		menuButton.draw(batch, 0, 0);
+		
+		int i = 0;
+		while (i < particleSources.size()) {
+			if (particleSources.get(i).draw(batch, x, y)) {
+				i++;
+			} else {
+				particleSources.remove(i);
+			}
+		}
 		
 		batch.end();
 		
