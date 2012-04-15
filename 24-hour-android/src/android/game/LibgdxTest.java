@@ -105,7 +105,7 @@ public class LibgdxTest implements ApplicationListener{
         
 //        terminus = new BitmapFont(Gdx.files.internal("terminus.fon"), false);
         
-        menuButton = new Sprite("menuButton.png");
+        menuButton = new Sprite("menuback.png", 64, 64);
         menuButton.x = 0;
         menuButton.y = Gdx.graphics.getHeight() - menuButton.height;
         
@@ -366,6 +366,16 @@ public class LibgdxTest implements ApplicationListener{
 					player.p = new Vector3D(Integer.parseInt(elements[1]),
 											Integer.parseInt(elements[2]),
 											0);
+					continue;
+				} else if (elements[0].equals("blackhole")) {
+					BlackHole b = new BlackHole("blackhole.png", 
+							new Vector3D(Integer.parseInt(elements[1]),
+										Integer.parseInt(elements[2]),
+										0),
+							Integer.parseInt(elements[3]),
+							Integer.parseInt(elements[4]),
+							random.nextDouble() * 360);
+					planets.add(b);
 					continue;
 				} else if (elements[0].equals("win")){
 					type = Planet.type.WIN;
