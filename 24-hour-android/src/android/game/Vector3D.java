@@ -14,12 +14,13 @@ package android.game;
  */
 
 public class Vector3D {
-	private float x, y, z;
+	private double x, y, z;
 
 	public Vector3D() { // Initialize empty vector
+		
 	}
-
-	public Vector3D(float x, float y, float z) {
+	
+	public Vector3D(double x, double y, double z) {
 		this.x = x;
 		this.y = y;
 		this.z = z;
@@ -41,11 +42,11 @@ public class Vector3D {
 	 * Advanced vector operations
 	 */
 
-	public float length() {
-		return (float) Math.sqrt(x * x + y * y + z * z);
+	public double length() {
+		return (double) Math.sqrt(x * x + y * y + z * z);
 	}
 
-	public float lengthSquared() {
+	public double lengthSquared() {
 		return x * x + y * y + z * z;
 	}
 
@@ -53,7 +54,7 @@ public class Vector3D {
 		return scale(1 / length());
 	}
 
-	public float dotProduct(Vector3D vector) {
+	public double dotProduct(Vector3D vector) {
 		return x * vector.x + y * vector.y + z * vector.z;
 	}
 
@@ -62,7 +63,7 @@ public class Vector3D {
 	}
 
 	public Vector3D projection(Vector3D vector) { // Project onto another vector
-		float length = vector.length();
+		double length = vector.length();
 		return vector.scale(dotProduct(vector) / (length * length));
 	}
 
@@ -73,17 +74,17 @@ public class Vector3D {
 		return subtract(projection(vector));
 	}
 	
-	public Matrix rotationM(float angle){
-		float c = (float) Math.cos(angle);
-		float s = (float) Math.sin(angle);
-		float t = 1 - c;
+	public Matrix rotationM(double angle){
+		double c = (double) Math.cos(angle);
+		double s = (double) Math.sin(angle);
+		double t = 1 - c;
 		
-//		Matrix m = new Matrix(4, 4, new float[] {t * x * x + c, t * x * y + s * z, t * x * z - s * y, 0,
+//		Matrix m = new Matrix(4, 4, new double[] {t * x * x + c, t * x * y + s * z, t * x * z - s * y, 0,
 //												 t * x * y - s * z, t * y * y + c, t * y * z + s * x, 0,
 //												 t * x * z + s * y, t * y * z - s * x, t * z * z + c, 0,
 //												 0, 0, 0, 1});
 		
-		Matrix m = new Matrix(4, 4, new float[] {t * x * x + c, t * x * y - s * z, t * x * z + s * y, 0,
+		Matrix m = new Matrix(4, 4, new double[] {t * x * x + c, t * x * y - s * z, t * x * z + s * y, 0,
 												 t * x * y + s * z, t * y * y + c, t * y * z - s * x, 0,
 												 t * x * z - s * y, t * y * z + s * x, t * z * z + c, 0,
 												 0, 0, 0, 1});
@@ -99,19 +100,19 @@ public class Vector3D {
 	
 	public Matrix pointMatrix(){
 		Matrix matrix = new Matrix(4, 1);
-		matrix.setAll(new float[] {x, y, z, 0});
+		matrix.setAll(new double[] {x, y, z, 0});
 		return matrix;
 	}
 	
 	public Matrix rowMatrix(){
 		Matrix matrix = new Matrix(1, 4);
-		matrix.setAll(new float[] {x, y, z, 1});
+		matrix.setAll(new double[] {x, y, z, 1});
 		return matrix;
 	}
 	
 	public Matrix colMatrix(){
 		Matrix matrix = new Matrix(4, 1);
-		matrix.setAll(new float[] {x, y, z, 1});
+		matrix.setAll(new double[] {x, y, z, 1});
 		return matrix;
 	}
 	
@@ -131,11 +132,11 @@ public class Vector3D {
 	 * Point operations
 	 */
 
-	public float distance(Vector3D point) {
+	public double distance(Vector3D point) {
 		return subtract(point).length();
 	}
 
-	public float distanceSquared(Vector3D point) {
+	public double distanceSquared(Vector3D point) {
 		return subtract(point).lengthSquared();
 	}
 
@@ -151,7 +152,7 @@ public class Vector3D {
 		return add(vector.scale(-1));
 	}
 
-	public Vector3D scale(float scalar) {
+	public Vector3D scale(double scalar) {
 		return new Vector3D(this.x * scalar, this.y * scalar, this.z * scalar);
 	}
 
@@ -159,27 +160,27 @@ public class Vector3D {
 	 * Setting and getting values
 	 */
 
-	public float getX() {
+	public double getX() {
 		return x;
 	}
 
-	public float getY() {
+	public double getY() {
 		return y;
 	}
 
-	public float getZ() {
+	public double getZ() {
 		return z;
 	}
 
-	public void setX(float x) {
+	public void setX(double x) {
 		this.x = x;
 	}
 
-	public void setY(float y) {
+	public void setY(double y) {
 		this.y = y;
 	}
 
-	public void setZ(float z) {
+	public void setZ(double z) {
 		this.z = z;
 	}
 }

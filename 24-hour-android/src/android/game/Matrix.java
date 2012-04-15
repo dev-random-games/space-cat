@@ -10,17 +10,17 @@ package android.game;
  */
 
 public class Matrix {
-	float[] values;
+	double[] values;
 	public final int rows, cols;
 	private Matrix augmented = null;
 
 	public Matrix(int rows, int cols) {
 		this.rows = rows;
 		this.cols = cols;
-		values = new float[rows * cols];
+		values = new double[rows * cols];
 	}
 
-	public Matrix(int rows, int cols, float[] vals) {
+	public Matrix(int rows, int cols, double[] vals) {
 		this.rows = rows;
 		this.cols = cols;
 		if (vals.length == rows * cols) {
@@ -52,17 +52,17 @@ public class Matrix {
 		return matrix;
 	}
 
-	public void set(int row, int col, float value) {
+	public void set(int row, int col, double value) {
 		values[col + cols * row] = value;
 	}
 
-	public void setAll(float[] vals) {
+	public void setAll(double[] vals) {
 		if (vals.length == this.values.length) {
 			this.values = vals;
 		}
 	}
 
-	public void setRow(int row, float[] values) {
+	public void setRow(int row, double[] values) {
 		if (values.length == cols) {
 			for (int i = 0; i < cols; i++) {
 				set(row, i, values[i]);
@@ -70,7 +70,7 @@ public class Matrix {
 		}
 	}
 
-	public void setCol(int col, float[] values) {
+	public void setCol(int col, double[] values) {
 		if (values.length == rows) {
 			for (int i = 0; i < rows; i++) {
 				set(i, col, values[i]);
@@ -78,12 +78,12 @@ public class Matrix {
 		}
 	}
 
-	public float get(int row, int col) {
+	public double get(int row, int col) {
 		return values[col + cols * row];
 	}
 
-	public float[] getRow(int row) {
-		float[] vals = new float[rows];
+	public double[] getRow(int row) {
+		double[] vals = new double[rows];
 		for (int i = 0; i < cols; i++) {
 			vals[i] = get(row, i);
 		}
@@ -113,7 +113,7 @@ public class Matrix {
 			Matrix result = new Matrix(this.rows, matrix.cols);
 			for (int i = 0; i < result.rows; i++) {
 				for (int j = 0; j < result.cols; j++) {
-					float value = 0;
+					double value = 0;
 					for (int index = 0; index < this.cols; index++) {
 						value += this.get(i, index) * matrix.get(index, j);
 					}
@@ -141,10 +141,10 @@ public class Matrix {
 		return matrix;
 	}
 
-	public Matrix scale(float scalar) {
+	public Matrix scale(double scalar) {
 		Matrix matrix = new Matrix(rows, cols);
 		matrix.values = values;
-		for (float value : matrix.values) {
+		for (double value : matrix.values) {
 			value *= scalar;
 		}
 		return matrix;
@@ -162,7 +162,7 @@ public class Matrix {
 
 	public void flipRows(int row1, int row2) {
 		for (int i = 0; i < cols; i++) {
-			float temp = get(row1, i);
+			double temp = get(row1, i);
 			set(row1, i, get(row2, i));
 			set(row2, i, temp);
 		}
@@ -174,7 +174,7 @@ public class Matrix {
 		}
 	}
 
-	public void scaleRow(int row, float scalar) {
+	public void scaleRow(int row, double scalar) {
 		for (int i = 0; i < cols; i++) {
 			set(row, i, get(row, i) * scalar);
 		}
@@ -210,7 +210,7 @@ public class Matrix {
 		augmented.addRows(row1, row2);
 	}
 
-	public void scaleRowAug(int row, float scalar) {
+	public void scaleRowAug(int row, double scalar) {
 		scaleRow(row, scalar);
 		augmented.scaleRow(row, scalar);
 	}
@@ -232,9 +232,9 @@ public class Matrix {
 				// Find largest value in column, then move that value to the top
 				// row.
 				int largest = 0;
-				float largestVal = -1;
+				double largestVal = -1;
 				for (int j = i; j < rows; j++) {
-					float val = Math.abs(matrix.get(j, i));
+					double val = Math.abs(matrix.get(j, i));
 					if (val > largest) {
 						largestVal = val;
 						largest = j;
@@ -249,7 +249,7 @@ public class Matrix {
 				scaleRowAug(i, 1 / get(i, i));
 				for (int j = 0; j < rows; j++) {
 					if (j != i) {
-						float scaleVal = matrix.get(j, i);
+						double scaleVal = matrix.get(j, i);
 						// Use i because matrix is square.
 						// Scale row, add to next row, then scale back. This can
 						// definitely be done faster.
