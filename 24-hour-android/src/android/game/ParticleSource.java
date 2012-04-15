@@ -3,6 +3,8 @@ package android.game;
 import java.util.ArrayList;
 import java.util.Random;
 
+import android.util.Log;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -47,12 +49,14 @@ public class ParticleSource {
 	public boolean draw(SpriteBatch batch, int dx, int dy) { // Returns true if this object should stay alive, false if it's dead
 		centerPosition = centerPosition.add(initVelocity);
 		boolean anyAlive = false;
+		int aliveCount = 0;
 		for (int i = 0; i < particles.size(); i++) {
 			Particle p = particles.get(i);
 			p.tick();
 			if (p.shouldRender()) {
 				batch.draw(texture, (float) (centerPosition.getX() + p.position.getX() - dx), (float) (centerPosition.getY() + p.position.getY() - dy), 0, 0, width, height, 1, 1, (float) p.rotation);
 				anyAlive = true;
+				aliveCount ++;
 			} else {
 				particles.remove(i);
 				i--;

@@ -3,7 +3,7 @@ package android.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-public class Player extends Sprite{
+public class Player extends AnimationSprite{
 
 	Vector3D p, v, a;
 	
@@ -17,8 +17,27 @@ public class Player extends Sprite{
 	int launchModeCoolDown = 0;
 	int maxLaunchModeCoolDown = 20;
 	
+	boolean isVisible = true;
+	
 	public Player() {
-		super("cat.png");
+		super("cat1.png", 1);
+		addFrame(new Sprite("cat2.png"));
+		addFrame(new Sprite("cat3.png"));
+		addFrame(new Sprite("cat4.png"));
+		addFrame(new Sprite("cat5.png"));
+		addFrame(new Sprite("cat6.png"));
+		addFrame(new Sprite("cat7.png"));
+		addFrame(new Sprite("cat8.png"));
+		addFrame(new Sprite("cat9.png"));
+		addFrame(new Sprite("cat10.png"));
+		addFrame(new Sprite("cat9.png"));
+		addFrame(new Sprite("cat8.png"));
+		addFrame(new Sprite("cat7.png"));
+		addFrame(new Sprite("cat6.png"));
+		addFrame(new Sprite("cat5.png"));
+		addFrame(new Sprite("cat4.png"));
+		addFrame(new Sprite("cat3.png"));
+		addFrame(new Sprite("cat2.png"));
 		v = new Vector3D();
         p = new Vector3D();
         a = new Vector3D();
@@ -42,18 +61,45 @@ public class Player extends Sprite{
 		launchModeCoolDown -= 1;
 	}
 	
-	public void draw(SpriteBatch batch, int dx, int dy){
-		x = p.getX();
-		y = p.getY();
-		
-		rotation = - 360 * Math.atan2(v.getX(), v.getY()) / (2 * Math.PI);
-		super.draw(batch, dx, dy);
-		if (refill){
-			if (fuel < maxFuel){
-				fuel += 10;
-			} else {
-				fuel = maxFuel;
-				refill = false;
+//<<<<<<< HEAD
+//	public void draw(SpriteBatch batch, int dx, int dy){
+//		x = p.getX();
+//		y = p.getY();
+//		
+//		rotation = - 360 * Math.atan2(v.getX(), v.getY()) / (2 * Math.PI);
+//		super.draw(batch, dx, dy);
+//		if (refill){
+//			if (fuel < maxFuel){
+//				fuel += 10;
+//			} else {
+//				fuel = maxFuel;
+//				refill = false;
+//=======
+	public void draw(SpriteBatch batch, int dx, int dy, int winX, int winY){
+		if (this.isVisible) {
+			x = p.getX();
+			y = p.getY();
+
+			Vector3D toWin = new Vector3D(winX - x, winY - y, 0).normalize();
+			arrow.rotation = - 360 * Math.atan2(toWin.getX(), toWin.getY()) / (2 * Math.PI) + 45;
+
+			Vector3D wallIntersect = LibgdxTest.vectorIntersectionWithRectangle(new Vector3D(x, y, 0), toWin, dx, dy, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+
+			Vector3D arrowPos = wallIntersect.subtract(toWin.scale(100));
+
+			arrow.x = arrowPos.getX();//p.getX() + width / 2 + toWin.getX() * 100;
+			arrow.y = arrowPos.getY();//p.getY() + height / 2 + toWin.getY() * 100;
+			//		arrow.draw(batch, dx, dy);
+
+			rotation = - 360 * Math.atan2(v.getX(), v.getY()) / (2 * Math.PI);
+			super.draw(batch, dx, dy);
+			if (refill){
+				if (fuel < maxFuel){
+					fuel += 10;
+				} else {
+					fuel = maxFuel;
+					refill = false;
+				}
 			}
 		}
 	}
@@ -79,9 +125,11 @@ public class Player extends Sprite{
 			if (planet.t == Planet.type.WIN){
 				return 1;
 			} else if (planet.t == Planet.type.HOSTILE){
+				this.isVisible = false;
 				return 2;
 			} else if (planet.t == Planet.type.FRIENDLY){
 				refill = true;
+				return 3;
 			}
 			
 		}

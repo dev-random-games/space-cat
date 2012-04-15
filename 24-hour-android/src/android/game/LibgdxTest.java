@@ -15,10 +15,12 @@ import com.badlogic.gdx.Audio;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.BitmapFont.HAlignment;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.input.GestureDetector;
@@ -42,9 +44,18 @@ public class LibgdxTest implements ApplicationListener{
 	
 	Audio audio;
 	static Music bambi;
+	static Music fart0;
+	static Music fart1;
+	static Music fart2;
+	static Music meow0;
+	static Music meow1;
+	static Music meow2;
+	static Music thbb0;
+	static Music thbb1;
 	
 	int levelEndWait = 0;
-	int maxLevelEndWait = 80;
+	int maxLevelEndWait = 70;
+	String doWhatAfterWait;
 	
 	Sprite fuel;
 	
@@ -71,6 +82,10 @@ public class LibgdxTest implements ApplicationListener{
 	Sprite menuButton;
 	
 	BitmapFont terminus;
+	
+	private TextureAtlas atlas;
+    private BitmapFont font;
+    
 
 	public void create() {	
 		
@@ -91,6 +106,14 @@ public class LibgdxTest implements ApplicationListener{
         
         audio = Gdx.audio;
         bambi = audio.newMusic(Gdx.files.internal("bambi.ogg"));
+        fart0 = audio.newMusic(Gdx.files.internal("sound/fart-0.ogg"));
+        fart1 = audio.newMusic(Gdx.files.internal("sound/fart-1.ogg"));
+        fart2 = audio.newMusic(Gdx.files.internal("sound/fart-2.ogg"));
+        meow0 = audio.newMusic(Gdx.files.internal("sound/meow-0.ogg"));
+        meow1 = audio.newMusic(Gdx.files.internal("sound/meow-1.ogg"));
+        meow2 = audio.newMusic(Gdx.files.internal("sound/meow-2.ogg"));
+        thbb0 = audio.newMusic(Gdx.files.internal("sound/thhhbbb-1.ogg"));
+        thbb1 = audio.newMusic(Gdx.files.internal("sound/thhhbbb-3.ogg"));
         //bambi.setLooping(true);
       
         fuel = new Sprite("fuelbar.png");
@@ -207,15 +230,25 @@ public class LibgdxTest implements ApplicationListener{
 						int response = player.influence(planet);
 						if (response == 1){
 							levelEndWait = maxLevelEndWait;
-							particleSources.add(new ParticleSource(200, 100, 2, new Vector3D(0, 0, 0), new Vector3D(player.x + player.width/2, player.y + player.height/2, 0), 40, "confetti_3.png"));
+							doWhatAfterWait = "nextlevel";
+							particleSources.add(new ParticleSource(150, 100, 2, new Vector3D(0, 0, 0), new Vector3D(player.x + player.width/2, player.y + player.height/2, 0), 40, "spark_3.png"));
 						} else if (response == 2){
-							loadLevel(levelNum);
+							//loadLevel(levelNum);
+							levelEndWait = maxLevelEndWait;
+							doWhatAfterWait = "restartlevel";
+							particleSources.add(new ParticleSource(150, 100, 2, new Vector3D(0, 0, 0), new Vector3D(player.x + player.width/2, player.y + player.height/2, 0), 40, "spark_4.png"));
+						} else if (response == 3){
+							particleSources.add(new ParticleSource(150, 100, 2, new Vector3D(0, 0, 0), new Vector3D(player.x + player.width/2, player.y + player.height/2, 0), 40, "confetti_3.png"));
 						}
 					}
 				}
 			} else if (levelEndWait == 1){
 				levelEndWait = 0;
-				loadLevel(levelNum + 1);
+				if (doWhatAfterWait == "nextlevel") {
+					loadLevel(levelNum + 1);
+				} else if (doWhatAfterWait == "restartlevel") {
+					loadLevel(levelNum);
+				}
 			} else {
 				levelEndWait --;
 			}
@@ -265,9 +298,11 @@ public class LibgdxTest implements ApplicationListener{
 			}
 		}
 		
-		particleSources.add(new ParticleSource(30, 2, 1, new Vector3D(0, 0, 0), new Vector3D(player.x + player.width/2, player.y + player.height/2, 0), 15, "red.png"));
-	
-		menuButton.draw(batch, 0, 0);
+		if ((!player.launchMode) && (levelEndWait == 0)){
+			particleSources.add(new ParticleSource(30, 2, 1, new Vector3D(0, 0, 0), new Vector3D(player.x + player.width/2, player.y + player.height/2, 0), 15, "red.png"));
+		}
+		
+		player.draw(batch, x, y, (int) win.p.getX(), (int) win.p.getY());
 		
 		int i = 0;
 		while (i < particleSources.size()) {
@@ -277,11 +312,18 @@ public class LibgdxTest implements ApplicationListener{
 				particleSources.remove(i);
 			}
 		}
+		while (particleSources.size() > 15){
+			particleSources.remove(0);
+		}
+//		Log.d("LibgdxTest", "Number of particle sources: " + particleSources.size());
+		
+		menuButton.draw(batch, 0, 0);
 		
 		fuel.width = (int) (Gdx.graphics.getWidth() * player.fuel / player.maxFuel);
 		fuel.x = (int) ((Gdx.graphics.getWidth() - fuel.width) / 2);
 		fuel.draw(batch, 0, 0);
 		
+		//MAYBE
 		player.draw(batch, x, y);
 		
 		batch.end();
