@@ -6,6 +6,8 @@ public class Player extends Sprite{
 
 	Vector3D p, v, a;
 	
+	Sprite arrow;
+	
 	double fuel;
 	double maxFuel = 500;
 	boolean refill = false;

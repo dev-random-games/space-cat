@@ -20,17 +20,18 @@ public class Controller implements GestureListener{
 		
 		vY = -vY;
 		
-		if (model.player.launchMode){
-			model.player.v = new Vector3D(vX / launchScale, vY / launchScale, 0);
-			model.player.launchMode = false;
-		} else {
-			if (model.player.fuel > 0){
-				model.player.a = new Vector3D(vX / fuelScale, vY / fuelScale, 0);
+		if (touchDown){
+			if (model.player.launchMode){
+				model.player.v = new Vector3D(vX / launchScale, vY / launchScale, 0);
+				model.player.launchMode = false;
 			} else {
-				model.player.fuel = 0;
+				if (model.player.fuel > 0){
+					model.player.a = new Vector3D(vX / fuelScale, vY / fuelScale, 0);
+				} else {
+					model.player.fuel = 0;
+				}
 			}
 		}
-		
 		touchDown = false;
 		return false;
 	}
@@ -75,9 +76,12 @@ public class Controller implements GestureListener{
 	@Override
 	public boolean touchDown(int x, int y, int pointer) {
 		y = Gdx.graphics.getHeight() - y;
-		touchDown = true;
-		touchSpot = new Vector3D(x, y, 0);
-		
+		if (!model.menuMode){
+			touchDown = true;
+			touchSpot = new Vector3D(x, y, 0);
+		} else {
+			model.currentMenu.touch(x, y, model);
+		}
 		return false;
 	}
 

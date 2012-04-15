@@ -9,7 +9,9 @@ import com.badlogic.gdx.math.Rectangle;
 public class Sprite {
 	protected TextureRegion texture;
 	
-	private int imgWidth, imgHeight;
+	protected int imgWidth;
+
+	protected int imgHeight;
 	
 	double x, y;
 	

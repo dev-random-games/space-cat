@@ -28,6 +28,7 @@ public class LibgdxTest implements ApplicationListener{
 	
 	Player player;
 	ArrayList<Planet> planets;
+	Planet win;
 	
 	Audio audio;
 	static Music bambi;
@@ -42,6 +43,9 @@ public class LibgdxTest implements ApplicationListener{
 	String levels = "levels";
 	
 	TiledSprite bg;
+	
+	boolean menuMode = true;
+	Menu currentMenu;
 
 	public void create() {	
 		
@@ -88,23 +92,33 @@ public class LibgdxTest implements ApplicationListener{
         this.camera = new Camera(this.player);
         
         bg = new TiledSprite("starbg.png");
+        
+        currentMenu = new Menu("menu.png");
+        currentMenu.addButton(new Button(200, 100, 300, 100, true){
+        	public void react(LibgdxTest model){
+        		Log.d("LibgdxTest", "Button pressed!");
+        		model.menuMode = false;
+        	}
+        });
 	}
 
 	public void render() {
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		
-		if (!player.launchMode){
-			player.move();
-			for (Planet planet : planets){
-				int response = player.influence(planet);
-				if (response == 1){
-					loadLevels(levels, levelNum + 1);
-				} else if (response == 2){
-					loadLevels(levels, levelNum);
+		if (!menuMode){
+			if (!player.launchMode){
+				player.move();
+				for (Planet planet : planets){
+					int response = player.influence(planet);
+					if (response == 1){
+						loadLevels(levels, levelNum + 1);
+					} else if (response == 2){
+						loadLevels(levels, levelNum);
+					}
 				}
 			}
 		}
-		
+			
 		batch.begin();
 		
 		bg.draw(batch, x, y);
@@ -117,6 +131,8 @@ public class LibgdxTest implements ApplicationListener{
 			planet.draw(batch, x, y);
 		}
 		
+		
+		
 		player.draw(batch, x, y);
 		
 		fuel.width = (int) (Gdx.graphics.getWidth() * player.fuel / player.maxFuel);
@@ -127,6 +143,17 @@ public class LibgdxTest implements ApplicationListener{
 		
 		stage.act(Gdx.graphics.getDeltaTime());
 		stage.draw();
+			
+		/*
+		 * Draw menu if wanted
+		 */
+		if (menuMode){
+			batch.begin();
+			
+			currentMenu.draw(batch, 0, 0);
+			
+			batch.end();
+		}
 	}
 
 	public void resize(int width, int height) {
@@ -211,7 +238,11 @@ public class LibgdxTest implements ApplicationListener{
 				r = Integer.parseInt(elements[3]);
 				m = Integer.parseInt(elements[4]);
 				
-				planets.add(new Planet(filename, type, new Vector3D(x, y, 0), r, m, random.nextDouble() * 360));
+				Planet p = new Planet(filename, type, new Vector3D(x, y, 0), r, m, random.nextDouble() * 360);
+				planets.add(p);
+				if (type == Planet.type.WIN){
+					win = p;
+				}
 			}
 		} catch (IOException e) {
 			Log.e("LibgdxTest", "Failed to load level " + levelName);
