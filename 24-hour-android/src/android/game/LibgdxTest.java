@@ -91,6 +91,8 @@ public class LibgdxTest implements ApplicationListener{
 	private TextureAtlas atlas;
     private BitmapFont font;
     
+    Rectangle levelBox;
+    
 
 	public void create() {	
 		
@@ -335,6 +337,8 @@ public class LibgdxTest implements ApplicationListener{
 			}
 		}
 		
+		if (!player.getBoundingBox().overlaps(levelBox)) loadLevel(levelNum);
+		
 		if ((!player.launchMode) && (levelEndWait == 0)){
 			particleSources.add(new ParticleSource(30, 2, 1, new Vector3D(0, 0, 0), new Vector3D(player.x + player.width/2, player.y + player.height/2, 0), 15, "red.png"));
 		}
@@ -410,6 +414,20 @@ public class LibgdxTest implements ApplicationListener{
 			}
 			
 			loadLevel(reader.readLine());
+			
+			levelBox = new Rectangle();
+			
+			for (Planet p : planets){
+				levelBox.merge(p.getBoundingBox());
+				
+				int boundary = 500;
+				
+				levelBox.x -= boundary;
+				levelBox.y -= boundary;
+				levelBox.width += boundary * 2;
+				levelBox.height += boundary * 2;
+			}
+			
 		} catch (IOException e) {
 			Log.e("LibgdxTest", "Not enough levels in level file!");
 			return false;
