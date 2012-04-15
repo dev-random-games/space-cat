@@ -40,8 +40,11 @@ public class LibgdxTest implements ApplicationListener{
 	
 	int levelNum;
 	String levels = "levels";
+	
+	TiledSprite bg;
 
-	public void create() {		
+	public void create() {	
+		
 		stage = new Stage(0, 0, true);
 		batch = new SpriteBatch();
 		
@@ -83,6 +86,8 @@ public class LibgdxTest implements ApplicationListener{
         fuel.width = Gdx.graphics.getWidth();
 
         this.camera = new Camera(this.player);
+        
+        bg = new TiledSprite("starbg.png");
 	}
 
 	public void render() {
@@ -101,6 +106,8 @@ public class LibgdxTest implements ApplicationListener{
 		}
 		
 		batch.begin();
+		
+		bg.draw(batch, x, y);
 
 		this.camera.update(player);
 		x = (int) camera.loc.getX();
@@ -174,6 +181,8 @@ public class LibgdxTest implements ApplicationListener{
 		
 		player = new Player();
 		
+		Random random = new Random();
+		
 		try {
 			while ((line = reader.readLine()) != null){
 				String[] elements = line.split(" ");
@@ -202,7 +211,7 @@ public class LibgdxTest implements ApplicationListener{
 				r = Integer.parseInt(elements[3]);
 				m = Integer.parseInt(elements[4]);
 				
-				planets.add(new Planet(filename, type, new Vector3D(x, y, 0), r, m));
+				planets.add(new Planet(filename, type, new Vector3D(x, y, 0), r, m, random.nextDouble() * 360));
 			}
 		} catch (IOException e) {
 			Log.e("LibgdxTest", "Failed to load level " + levelName);

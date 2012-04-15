@@ -38,8 +38,8 @@ public class Planet extends Sprite {
 		this.m = mass == 0 ? Math.PI * radius * radius / 50 : mass;
 	}
 		
-	public Planet(String filename, type t, Vector3D position, double radius, double mass) {
-		super(filename);
+	public Planet(String filename, type t, Vector3D position, double radius, double mass, double rotation) {
+		super(filename, rotation);
 		this.p = position;
 		this.r = radius;
 		this.m = mass;
