@@ -27,6 +27,7 @@ public class LibgdxTest implements ApplicationListener{
 	GestureDetector gestureDetector;
 	
 	Player player;
+	
 	ArrayList<Planet> planets;
 	Planet win;
 	
@@ -133,7 +134,7 @@ public class LibgdxTest implements ApplicationListener{
 		
 		
 		
-		player.draw(batch, x, y);
+		player.draw(batch, x, y, (int) win.p.getX(), (int) win.p.getY());
 		
 		fuel.width = (int) (Gdx.graphics.getWidth() * player.fuel / player.maxFuel);
 		fuel.x = (int) ((Gdx.graphics.getWidth() - fuel.width) / 2);

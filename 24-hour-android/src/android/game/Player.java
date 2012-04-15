@@ -23,6 +23,9 @@ public class Player extends Sprite{
         a = new Vector3D();
         
         fuel = maxFuel;
+        
+        arrow = new Sprite("pointer.png");
+        arrow.rotCenter = false;
 	}
 	
 	public void move(){
@@ -37,9 +40,16 @@ public class Player extends Sprite{
 		launchModeCoolDown -= 1;
 	}
 	
-	public void draw(SpriteBatch batch, int dx, int dy){
+	public void draw(SpriteBatch batch, int dx, int dy, int winX, int winY){
 		x = p.getX();
 		y = p.getY();
+		
+		Vector3D toWin = new Vector3D(winX - x, winY - y, 0);
+		arrow.rotation = - 360 * Math.atan2(toWin.getX(), toWin.getY()) / (2 * Math.PI) + 45;
+		arrow.x = p.getX() + width / 2;
+		arrow.y = p.getY() + height / 2;
+		arrow.draw(batch, dx, dy);
+		
 		rotation = - 360 * Math.atan2(v.getX(), v.getY()) / (2 * Math.PI);
 		super.draw(batch, dx, dy);
 		if (refill){
