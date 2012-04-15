@@ -3,6 +3,8 @@ package android.game;
 import java.util.ArrayList;
 import java.util.Random;
 
+import android.util.Log;
+
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Audio;
 import com.badlogic.gdx.Gdx;
@@ -27,9 +29,11 @@ public class LibgdxTest implements ApplicationListener{
 	
 	Sprite fuel;
 	
+	Camera camera;
+	
 	int x, y;
 
-	public void create() {
+	public void create() {		
 		stage = new Stage(0, 0, true);
 		batch = new SpriteBatch();
 		
@@ -71,6 +75,7 @@ public class LibgdxTest implements ApplicationListener{
         fuel.height = 15;
         fuel.width = Gdx.graphics.getWidth();
 
+        this.camera = new Camera(this.player);
 	}
 
 	public void render() {
@@ -85,8 +90,9 @@ public class LibgdxTest implements ApplicationListener{
 		
 		batch.begin();
 
-		x = (int) player.x - Gdx.graphics.getWidth() / 2;
-		y = (int) player.y - Gdx.graphics.getHeight() / 2;
+		this.camera.update();
+		x = (int) camera.loc.getX();
+		y = (int) camera.loc.getY();
 		
 		for (Planet planet : planets){
 			planet.draw(batch, x, y);
