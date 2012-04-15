@@ -35,8 +35,10 @@ public class Player extends Sprite{
 	
 	/*
 	 * Influence the cat with gravity. Returns true if collision occurs
+	 * Returns 1 if win
+	 * Returns 2 if lose
 	 */
-	public boolean influence(Planet planet){
+	public int influence(Planet planet){
 		Vector3D p = this.p.add(new Vector3D(width / 2, height / 2, 0));
 		Vector3D connector = p.subtract(planet.p);
 		Vector3D dir = connector.normalize().scale(-1);
@@ -56,7 +58,7 @@ public class Player extends Sprite{
 			v = v.add(dir.scale((float) (planet.m / connector.lengthSquared())));
 		}
 		
-		return false;
+		return 0;
 	}
 
 }

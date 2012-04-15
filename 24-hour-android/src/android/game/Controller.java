@@ -42,9 +42,13 @@ public class Controller implements GestureListener{
 //			model.player.v = model.player.p.subtract(new Vector3D(x, y, 0)).normalize().scale(-3);
 		}
 		
-		Vector3D a = new Vector3D((x - touchSpot.getX()) / fuelScale, (y - touchSpot.getY()) / fuelScale, 0);
-		model.player.fuel -= a.length() * 5;
-		model.player.v = model.player.v.add(a);
+		if (model.player.fuel > 0){
+			Vector3D a = new Vector3D((x - touchSpot.getX()) / fuelScale, (y - touchSpot.getY()) / fuelScale, 0);
+			model.player.fuel -= a.length() * 5;
+			model.player.v = model.player.v.add(a);
+		} else {
+			model.player.fuel = 0;
+		}
 		
 		return false;
 	}

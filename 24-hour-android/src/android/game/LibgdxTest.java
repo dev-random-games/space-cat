@@ -22,8 +22,6 @@ public class LibgdxTest implements ApplicationListener{
 	Player player;
 	ArrayList<Planet> planets;
 	
-	Sprite menuBar;
-	
 	Audio audio;
 	static Music bambi;
 	
@@ -46,6 +44,9 @@ public class LibgdxTest implements ApplicationListener{
 //        planets.add(new Planet("sun.png", new Vector3D(300, 200, 0), 100, 1000));
 //        planets.add(new Planet("sun.png", new Vector3D(500, 100, 0), 150, 3000));
         
+        /*
+         * Creates planets
+         */
         Random random = new Random();
         for (int i = 0; i < 20; i++){
         	int planetDecide = random.nextInt(100);
@@ -60,16 +61,12 @@ public class LibgdxTest implements ApplicationListener{
         	planets.add(new Planet(planet, new Vector3D(random.nextInt(5000), random.nextInt(5000), 0), random.nextInt(500)));
         }
         
-        menuBar = new Sprite("menubar.png");
-        menuBar.height = 50;
-        menuBar.width = Gdx.graphics.getWidth();
-        
         audio = Gdx.audio;
         bambi = audio.newMusic(Gdx.files.internal("bambi.ogg"));
         //bambi.setLooping(true);
       
         fuel = new Sprite("fuelbar.png");
-        fuel.height = 30;
+        fuel.height = 15;
         fuel.width = Gdx.graphics.getWidth();
 
 	}
@@ -95,13 +92,8 @@ public class LibgdxTest implements ApplicationListener{
 		
 		player.draw(batch, x, y);
 		
-		menuBar.x = x;
-		menuBar.y = y;
-//		menuBar.draw(batch, x, y);
-		
 		fuel.width = (int) (Gdx.graphics.getWidth() * player.fuel / player.maxFuel);
 		fuel.x = (int) ((Gdx.graphics.getWidth() - fuel.width) / 2);
-		fuel.height = 5;
 		fuel.draw(batch, 0, 0);
 		
 		batch.end();

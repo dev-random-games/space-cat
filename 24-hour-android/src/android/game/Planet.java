@@ -7,6 +7,15 @@ public class Planet extends Sprite {
 	double r;
 	double m;
 	
+	enum type{
+		WIN,
+		FRIENDLY,
+		HOSTILE,
+		DESERT,
+		NEPTUNE,
+		NEUTRAL
+	}
+	
 	public Planet(String filename, Vector3D position, double radius, double mass) {
 		super(filename);
 		this.p = position;
