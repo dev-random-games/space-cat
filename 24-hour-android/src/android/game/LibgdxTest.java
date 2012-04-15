@@ -99,7 +99,7 @@ public class LibgdxTest implements ApplicationListener{
         
         bg = new TiledSprite("starbg.png");
         
-        terminus = new BitmapFont(Gdx.files.internal("terminus.fon"), false);
+//        terminus = new BitmapFont(Gdx.files.internal("terminus.fon"), false);
         
         menuButton = new Sprite("menuButton.png");
         menuButton.x = 0;
