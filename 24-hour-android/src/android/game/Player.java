@@ -55,7 +55,7 @@ public class Player extends Sprite{
 		
 		arrow.x = arrowPos.getX();//p.getX() + width / 2 + toWin.getX() * 100;
 		arrow.y = arrowPos.getY();//p.getY() + height / 2 + toWin.getY() * 100;
-		arrow.draw(batch, dx, dy);
+//		arrow.draw(batch, dx, dy);
 		
 		rotation = - 360 * Math.atan2(v.getX(), v.getY()) / (2 * Math.PI);
 		super.draw(batch, dx, dy);

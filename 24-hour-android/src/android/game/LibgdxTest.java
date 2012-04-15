@@ -17,6 +17,7 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.input.GestureDetector;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
 public class LibgdxTest implements ApplicationListener{
@@ -50,6 +51,8 @@ public class LibgdxTest implements ApplicationListener{
 	Menu herpMenu;
 	Menu levelMenu;
 	Menu mainMenu;
+	
+	Sprite glowG, glowR, glowB;
 
 	public void create() {	
 		
@@ -73,6 +76,11 @@ public class LibgdxTest implements ApplicationListener{
         fuel = new Sprite("fuelbar.png");
         fuel.height = 15;
         fuel.width = Gdx.graphics.getWidth();
+        
+        glowR = new Sprite("redGlow.png");
+        glowG = new Sprite("greenGlow.png");
+        glowG.width = glowG.height = 500;
+        glowB = new Sprite("blueGlow.png");
 
         this.camera = new Camera(this.player);
         
@@ -167,6 +175,8 @@ public class LibgdxTest implements ApplicationListener{
 				}
 			}
 		}
+		
+		Rectangle window = new Rectangle(x, y, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 			
 		batch.begin();
 		
@@ -180,7 +190,25 @@ public class LibgdxTest implements ApplicationListener{
 			planet.draw(batch, x, y);
 		}
 		
-		
+		for (Planet planet : planets){
+			Vector3D toPlanet = planet.p.subtract(player.p);
+			Vector3D wallIntersect = LibgdxTest.vectorIntersectionWithRectangle(player.p, toPlanet, x, y, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+			Vector3D position = wallIntersect;//.add(toPlanet.scale(20 / toPlanet.lengthSquared()));
+			
+			if (planet.t == Planet.type.WIN){
+				glowG.x = position.getX() - glowG.width / 2;
+				glowG.y = position.getY() - glowG.height / 2;
+				glowG.draw(batch, x, y);
+			} else if (toPlanet.length() < Math.sqrt(Gdx.graphics.getWidth() * Gdx.graphics.getHeight()) && !window.contains((float) planet.x, (float) planet.y)){
+				if (planet.t == Planet.type.HOSTILE){
+					position = position.add(toPlanet.scale(1 / 30));
+					glowR.x = position.getX() - glowR.width / 2;
+					glowR.y = position.getY() - glowR.height / 2;
+					glowR.draw(batch, x, y);
+				}
+			
+			}
+		}
 		
 		player.draw(batch, x, y, (int) win.p.getX(), (int) win.p.getY());
 		
@@ -257,8 +285,6 @@ public class LibgdxTest implements ApplicationListener{
 		
 		Random random = new Random();
 		
-		player.launchMode = true;
-		
 		try {
 			while ((line = reader.readLine()) != null){
 				String[] elements = line.split(" ");
@@ -299,6 +325,8 @@ public class LibgdxTest implements ApplicationListener{
 					win = p;
 				}
 			}
+			
+			player.launchMode = true;
 		} catch (IOException e) {
 			Log.e("LibgdxTest", "Failed to load level " + levelName);
 		}
