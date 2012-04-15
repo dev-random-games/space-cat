@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.Date;
 
 import android.util.Log;
 
@@ -31,6 +32,8 @@ public class LibgdxTest implements ApplicationListener{
 	GestureDetector gestureDetector;
 	
 	Player player;
+	
+	double levelStartTime;
 	
 	ArrayList<Planet> planets;
 	Planet win;
@@ -92,10 +95,9 @@ public class LibgdxTest implements ApplicationListener{
         fuel.height = 15;
         fuel.width = Gdx.graphics.getWidth();
         
-        glowR = new Sprite("redGlow.png", 200, 200);
-        glowG = new Sprite("greenGlow.png", 300, 300);
-        //glowG.width = glowG.height = 500;
-        glowB = new Sprite("blueGlow.png", 200, 200);
+        glowR = new Sprite("redGlow.png", 100, 100);
+        glowG = new Sprite("greenGlow.png", 200, 200);
+        glowB = new Sprite("blueGlow.png", 100, 100);
 
         this.camera = new Camera(this.player);
         
@@ -232,27 +234,30 @@ public class LibgdxTest implements ApplicationListener{
 			
 		}
 		
+		
 		for (Planet planet : planets){
 			Vector3D toPlanet = planet.p.subtract(player.p);
 			Vector3D wallIntersect = LibgdxTest.vectorIntersectionWithRectangle(player.p, toPlanet, x, y, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 			Vector3D position = wallIntersect;//.add(toPlanet.scale(20 / toPlanet.lengthSquared()));
 			
-			if (planet.t == Planet.type.WIN){
-				glowG.x = position.getX() - glowG.width / 2;
-				glowG.y = position.getY() - glowG.height / 2;
-				glowG.draw(batch, x, y);
-				//batch.draw(texture, (int) x - dx, (int) y - dy, width / 2, height / 2, width, height, 1, 1, (float) rotation);
-			} else if (toPlanet.length() < Math.sqrt(Gdx.graphics.getWidth() * Gdx.graphics.getHeight()) && !window.contains((float) planet.x, (float) planet.y)){
-				if (planet.t == Planet.type.HOSTILE){
-					position = position.add(toPlanet.scale(1 / 30));
-					glowR.x = position.getX() - glowR.width / 2;
-					glowR.y = position.getY() - glowR.height / 2;
-					glowR.draw(batch, x, y);
-				} else if (planet.t == Planet.type.FRIENDLY){
-					position = position.add(toPlanet.scale(1 / 30));
-					glowB.x = position.getX() - glowB.width / 2;
-					glowB.y = position.getY() - glowB.height / 2;
-					glowB.draw(batch, x, y);
+			if (!window.contains((float) planet.x, (float) planet.y)){
+				if (planet.t == Planet.type.WIN){
+					glowG.x = position.getX() - glowG.width / 2;
+					glowG.y = position.getY() - glowG.height / 2;
+					glowG.draw(batch, x, y);
+					//batch.draw(texture, (int) x - dx, (int) y - dy, width / 2, height / 2, width, height, 1, 1, (float) rotation);
+				} else if (toPlanet.length() < Math.sqrt(Gdx.graphics.getWidth() * Gdx.graphics.getHeight())){
+					if (planet.t == Planet.type.HOSTILE){
+						position = position.add(toPlanet.scale(1 / 30));
+						glowR.x = position.getX() - glowR.width / 2;
+						glowR.y = position.getY() - glowR.height / 2;
+						glowR.draw(batch, x, y);
+					} else if (planet.t == Planet.type.FRIENDLY){
+						position = position.add(toPlanet.scale(1 / 30));
+						glowB.x = position.getX() - glowB.width / 2;
+						glowB.y = position.getY() - glowB.height / 2;
+						glowB.draw(batch, x, y);
+					}
 				}
 			
 			}
@@ -343,6 +348,7 @@ public class LibgdxTest implements ApplicationListener{
 		String line;
 		
 		planets = new ArrayList<Planet>();
+		particleSources = new ArrayList<ParticleSource>();
 		
 		Random random = new Random();
 		

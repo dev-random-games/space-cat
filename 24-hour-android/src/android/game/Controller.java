@@ -12,6 +12,8 @@ public class Controller implements GestureListener{
 	boolean touchDown = false;
 	Vector3D touchSpot;
 	
+	double levelStartTime;
+	
 	int launchScale = 500;
 	int fuelScale = 5000;
 
