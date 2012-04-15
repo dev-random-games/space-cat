@@ -40,8 +40,11 @@ public class LibgdxTest implements ApplicationListener{
 	
 	int levelNum;
 	String levels = "levels";
+	
+	TiledSprite bg;
 
-	public void create() {		
+	public void create() {	
+		
 		stage = new Stage(0, 0, true);
 		batch = new SpriteBatch();
 		
@@ -83,6 +86,8 @@ public class LibgdxTest implements ApplicationListener{
         fuel.width = Gdx.graphics.getWidth();
 
         this.camera = new Camera(this.player);
+        
+        bg = new TiledSprite("starbg.png");
 	}
 
 	public void render() {
@@ -101,6 +106,8 @@ public class LibgdxTest implements ApplicationListener{
 		}
 		
 		batch.begin();
+		
+		bg.draw(batch, x, y);
 
 		this.camera.update(player);
 		x = (int) camera.loc.getX();
