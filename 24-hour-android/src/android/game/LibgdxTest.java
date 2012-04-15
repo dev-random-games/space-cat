@@ -76,6 +76,7 @@ public class LibgdxTest implements ApplicationListener{
 	Menu levelMenu;
 	Menu mainMenu;
 	Menu creditsMenu;
+	Menu tutorialMenu;
 	
 	Sprite glowG, glowR, glowB;
 	
@@ -134,11 +135,10 @@ public class LibgdxTest implements ApplicationListener{
         menuButton.x = 0;
         menuButton.y = Gdx.graphics.getHeight() - menuButton.height;
         
-        herpMenu = new Menu("menu.png");
-        herpMenu.addButton(new Button(200, 100, 300, 100, true){
+        tutorialMenu = new Menu("tutorial.png");
+        tutorialMenu.addButton(new Button(0, 0, 512, 512, true){
         	public void react(LibgdxTest model){
-        		Log.d("LibgdxTest", "Button pressed!");
-        		model.menuMode = false;
+        		currentMenu = mainMenu;
         	}
         });
         currentMenu = herpMenu;
@@ -177,6 +177,7 @@ public class LibgdxTest implements ApplicationListener{
         mainMenu.addButton(new Button(60, 256 - 120, 178 - 60, 120 - 103, true){
 			public void react(LibgdxTest model) {
 				Log.d("Button", "Tutorial");
+				model.currentMenu = tutorialMenu;
 			}
         });
         /*
@@ -388,7 +389,7 @@ public class LibgdxTest implements ApplicationListener{
 	public void loadLevel(String levelName){
 		Log.d("LibgdxTest", "Loading level " + levelName);
 		FileHandle file = Gdx.files.internal(levelName);
-		Pixmap levelBMP = new Pixmap(file);
+
 //		BufferedReader reader = new BufferedReader(file.reader());
 		
 //		String line;
@@ -401,118 +402,128 @@ public class LibgdxTest implements ApplicationListener{
 		int cscalar = 100;
 		int rscalar = 5;
 		
-		for (int x = 0; x < levelBMP.getWidth() - 1; x++) {
-			for (int y = 0; y < levelBMP.getHeight() - 1; y++) {
-				String filename = "";
-				Planet.type type = Planet.type.NEUTRAL;
-				
-//				Log.v("LibgdxTest", "hello");
-				
-				int rgb = levelBMP.getPixel(x, y);
-				int r = (rgb & 0xff000000) >> 24;
+		if(levelName.contains(".png")) { 
+			Pixmap levelBMP = new Pixmap(file);
+			for (int x = 0; x < levelBMP.getWidth() - 1; x++) {
+				for (int y = 0; y < levelBMP.getHeight() - 1; y++) {
+					String filename = "";
+					Planet.type type = Planet.type.NEUTRAL;
+
+					//				Log.v("LibgdxTest", "hello");
+
+					int rgb = levelBMP.getPixel(x, y);
+					int r = (rgb & 0xff000000) >> 24;
 				int g = (rgb & 0x00ff0000) >> 16;
-				int b = (rgb & 0x0000ff00) >> 8;
-				int a = rgb & 0x000000ff;
-				
-				int cx = x * cscalar;
-				int cy = y * cscalar;
-				int cr = a * rscalar;
-				
-				if (r == -1) r = 255;
-				
-				if (a <= 0) {
-					continue;
-				} else {
-					Log.d("LibgdxTest", "RGBA: (" + r + ", " + g + ", " + b + ", " + a + ")");
-				}
-				
-				
-				
-				if (r == 0 && g == 0 && b == 0) {
-					BlackHole bh = new BlackHole("blackhole.png", new Vector3D(cx, cy, 0), cr, random.nextDouble() * 360);
-					planets.add(bh);
-					continue;
-				} else if (r == 255 && g == 255 && b == 255) {
-					player = new Player();
-					player.p = new Vector3D(cx, cy, 0);
-					continue;
-				} else if (g > 1){
-					type = Planet.type.WIN;
-					filename = "earth.png";
-				} else if (b > 0){
-					type = Planet.type.FRIENDLY;
-					filename = "neptune.png";
-				} else if (r > 0){
-					type = Planet.type.HOSTILE;
-					filename = "mars.png";
-				} else {
-					type = Planet.type.NEUTRAL;
-					filename = "sun.png";
-				}
-				
-				
-				
-				Log.d("LibgdxTest1", filename + "(" + x + ", " + y + ")");
-				Planet p = new Planet(filename, type, new Vector3D(cx, cy, 0), cr, random.nextDouble() * 360);
-				planets.add(p);
-				if (type == Planet.type.WIN){
-					win = p;
-				}
-				
+			int b = (rgb & 0x0000ff00) >> 8;
+			int a = rgb & 0x000000ff;
+
+			int cx = x * cscalar;
+			int cy = y * cscalar;
+			int cr = a * rscalar;
+
+			if (r == -1) r = 255;
+
+			if (a <= 0) {
+				continue;
+			} else {
+				Log.d("LibgdxTest", "RGBA: (" + r + ", " + g + ", " + b + ", " + a + ")");
 			}
-		}
-//			while ((line = reader.readLine()) != null){
-//				String[] elements = line.split(" ");
-//				String filename;
-//				Planet.type type;
-//				int x, y, r, m;
-//				
-//				Log.v("LibgdxTest", line);
-//				
-//				if (elements[0].equals("player")) {
-//					player = new Player();
-//					player.p = new Vector3D(Integer.parseInt(elements[1]),
-//											Integer.parseInt(elements[2]),
-//											0);
-//					continue;
-//				} else if (elements[0].equals("blackhole")) {
-//					BlackHole b = new BlackHole("blackhole.png", 
-//							new Vector3D(Integer.parseInt(elements[1]),
-//										Integer.parseInt(elements[2]),
-//										0),
-//							Integer.parseInt(elements[3]),
-//							Integer.parseInt(elements[4]),
-//							random.nextDouble() * 360);
-//					planets.add(b);
-//					continue;
-//				} else if (elements[0].equals("win")){
-//					type = Planet.type.WIN;
-//					filename = "earth.png";
-//				} else if (elements[0].equals("friendly")){
-//					type = Planet.type.FRIENDLY;
-//					filename = "neptune.png";
-//				} else if (elements[0].equals("hostile")){
-//					type = Planet.type.HOSTILE;
-//					filename = "mars.png";
-//				} else {
-//					type = Planet.type.NEUTRAL;
-//					filename = "sun.png";
-//				}
-//				
-//				x = Integer.parseInt(elements[1]);
-//				y = Integer.parseInt(elements[2]);
-//				r = Integer.parseInt(elements[3]);
-//				m = Integer.parseInt(elements[4]);
-//				
-//				Planet p = new Planet(filename, type, new Vector3D(x, y, 0), r, m, random.nextDouble() * 360);
-//				planets.add(p);
-//				if (type == Planet.type.WIN){
-//					win = p;
-//				}
-//			}
+
+
+
+			if (r == 0 && g == 0 && b == 0) {
+				BlackHole bh = new BlackHole("blackhole.png", new Vector3D(cx, cy, 0), cr, random.nextDouble() * 360);
+				planets.add(bh);
+				continue;
+			} else if (r == 255 && g == 255 && b == 255) {
+				player = new Player();
+				player.p = new Vector3D(cx, cy, 0);
+				continue;
+			} else if (g > 1){
+				type = Planet.type.WIN;
+				filename = "earth.png";
+			} else if (b > 0){
+				type = Planet.type.FRIENDLY;
+				filename = "neptune.png";
+			} else if (r > 0){
+				type = Planet.type.HOSTILE;
+				filename = "mars.png";
+			} else {
+				type = Planet.type.NEUTRAL;
+				filename = "sun.png";
+			}
+
+			Log.d("LibgdxTest1", filename + "(" + x + ", " + y + ")");
+			Planet p = new Planet(filename, type, new Vector3D(cx, cy, 0), cr, random.nextDouble() * 360);
+			planets.add(p);
+			if (type == Planet.type.WIN){
+				win = p;
+			}
+
+				}
+			}
+		} else if (levelName.contains(".lvl")) {
+			BufferedReader reader = new BufferedReader(file.reader());
+			String line;
+			
+			try {
+				while ((line = reader.readLine()) != null){
+					String[] elements = line.split(" ");
+					String filename;
+					Planet.type type;
+					int x, y, r, m;
+					
+					if (elements[0].equals("player")) {
+						player = new Player();
+						player.p = new Vector3D(Integer.parseInt(elements[1]),
+												Integer.parseInt(elements[2]),
+												0);
+						continue;
+					} else if (elements[0].equals("blackhole")) {
+						BlackHole b = new BlackHole("blackhole.png", 
+								new Vector3D(Integer.parseInt(elements[1]),
+											Integer.parseInt(elements[2]),
+											0),
+								Integer.parseInt(elements[3]),
+								Integer.parseInt(elements[4]),
+								random.nextDouble() * 360);
+						planets.add(b);
+						continue;
+					} else if (elements[0].equals("win")){
+						type = Planet.type.WIN;
+						filename = "earth.png";
+					} else if (elements[0].equals("friendly")){
+						type = Planet.type.FRIENDLY;
+						filename = "neptune.png";
+					} else if (elements[0].equals("hostile")){
+						type = Planet.type.HOSTILE;
+						filename = "mars.png";
+					} else {
+						type = Planet.type.NEUTRAL;
+						filename = "sun.png";
+					}
+					
+					x = Integer.parseInt(elements[1]);
+					y = Integer.parseInt(elements[2]);
+					r = Integer.parseInt(elements[3]);
+					m = Integer.parseInt(elements[4]);
+					
+					Planet p = new Planet(filename, type, new Vector3D(x, y, 0), r, m, random.nextDouble() * 360);
+					planets.add(p);
+					if (type == Planet.type.WIN){
+						win = p;
+					}
+				}
+			} catch (NumberFormatException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		
 		player.launchMode = true;
-		
+		}
 	}
 	
 	public static Vector3D vectorIntersectionWithRectangle(Vector3D p, Vector3D v, int x, int y, int w, int h){
