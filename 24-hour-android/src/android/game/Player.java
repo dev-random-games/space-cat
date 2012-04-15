@@ -42,20 +42,9 @@ public class Player extends Sprite{
 		launchModeCoolDown -= 1;
 	}
 	
-	public void draw(SpriteBatch batch, int dx, int dy, int winX, int winY){
+	public void draw(SpriteBatch batch, int dx, int dy){
 		x = p.getX();
 		y = p.getY();
-		
-		Vector3D toWin = new Vector3D(winX - x, winY - y, 0).normalize();
-		arrow.rotation = - 360 * Math.atan2(toWin.getX(), toWin.getY()) / (2 * Math.PI) + 45;
-		
-		Vector3D wallIntersect = LibgdxTest.vectorIntersectionWithRectangle(new Vector3D(x, y, 0), toWin, dx, dy, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-		
-		Vector3D arrowPos = wallIntersect.subtract(toWin.scale(100));
-		
-		arrow.x = arrowPos.getX();//p.getX() + width / 2 + toWin.getX() * 100;
-		arrow.y = arrowPos.getY();//p.getY() + height / 2 + toWin.getY() * 100;
-//		arrow.draw(batch, dx, dy);
 		
 		rotation = - 360 * Math.atan2(v.getX(), v.getY()) / (2 * Math.PI);
 		super.draw(batch, dx, dy);

@@ -46,6 +46,14 @@ public class Planet extends Sprite {
 		this.t = t;
 	}
 	
+	public Planet(String filename, type t, Vector3D position, double radius, double rotation) {
+		super(filename, rotation);
+		this.p = position;
+		this.r = radius;
+		this.m = Math.PI * radius * radius / 50;
+		this.t = t;
+	}
+	
 	public void draw(SpriteBatch batch, int dx, int dy){
 		x = p.getX();
 		y = p.getY();
