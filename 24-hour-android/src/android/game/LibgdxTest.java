@@ -103,7 +103,7 @@ public class LibgdxTest implements ApplicationListener{
         
 //        terminus = new BitmapFont(Gdx.files.internal("terminus.fon"), false);
         
-        menuButton = new Sprite("menuButton.png");
+        menuButton = new Sprite("menuback.png", 64, 64);
         menuButton.x = 0;
         menuButton.y = Gdx.graphics.getHeight() - menuButton.height;
         
