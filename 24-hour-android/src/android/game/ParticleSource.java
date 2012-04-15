@@ -47,11 +47,15 @@ public class ParticleSource {
 	public boolean draw(SpriteBatch batch, int dx, int dy) { // Returns true if this object should stay alive, false if it's dead
 		centerPosition = centerPosition.add(initVelocity);
 		boolean anyAlive = false;
-		for (Particle p : particles) {
+		for (int i = 0; i < particles.size(); i++) {
+			Particle p = particles.get(i);
 			p.tick();
 			if (p.shouldRender()) {
 				batch.draw(texture, (float) (centerPosition.getX() + p.position.getX() - dx), (float) (centerPosition.getY() + p.position.getY() - dy), 0, 0, width, height, 1, 1, (float) p.rotation);
 				anyAlive = true;
+			} else {
+				particles.remove(i);
+				i--;
 			}
 		}
 		return anyAlive;
