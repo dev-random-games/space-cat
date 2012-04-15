@@ -49,6 +49,7 @@ public class LibgdxTest implements ApplicationListener{
 	Menu currentMenu;
 	Menu herpMenu;
 	Menu levelMenu;
+	Menu mainMenu;
 
 	public void create() {	
 		
@@ -62,25 +63,6 @@ public class LibgdxTest implements ApplicationListener{
         planets = new ArrayList<Planet>();
         
         player = new Player();
-        
-        /*
-         * Creates planets
-         */
-//        int scale = 750;
-//        Random random = new Random();
-//    	planets.add(new Planet("earth.png", new Vector3D(random.nextInt(1000), random.nextInt(1000), 0), random.nextInt(scale) * .1 + 20, 0, random.nextDouble() * 360));
-//        for (int i = 0; i < 5; i++){
-//        	int planetDecide = random.nextInt(100);
-//        	String planet;
-//        	if (planetDecide > 50){
-//        		planet = "sun.png";
-//        	} else if (planetDecide > 25){
-//        		planet = "neptune.png";
-//        	} else {
-//        		planet = "mars.png";
-//        	}
-//        	planets.add(new Planet(planet, new Vector3D(random.nextInt(1000), random.nextInt(1000), 0), random.nextInt(scale) * .05 + 20, 0, random.nextDouble() * 360));
-//        }
 
         loadLevel(1);
         
@@ -107,6 +89,11 @@ public class LibgdxTest implements ApplicationListener{
         
         levelMenu = new Menu("levelmenu.png");
         currentMenu = levelMenu;
+        levelMenu.addButton(new Button(28, 64 - 5 - 10, 10, 10, true){
+        	public void react(LibgdxTest model){
+        		model.currentMenu = model.mainMenu;
+        	}
+        });
         levelMenu.addButton(new LevelButton(17, 64 - 18 - 10, 10, 10, true, 1));
         levelMenu.addButton(new LevelButton(28, 64 - 18 - 10, 10, 10, true, 2));
         levelMenu.addButton(new LevelButton(39, 64 - 18 - 10, 10, 10, true, 3));
@@ -116,6 +103,52 @@ public class LibgdxTest implements ApplicationListener{
         levelMenu.addButton(new LevelButton(17, 64 - 40 - 10, 10, 10, true, 7));
         levelMenu.addButton(new LevelButton(28, 64 - 40 - 10, 10, 10, true, 8));
         levelMenu.addButton(new LevelButton(39, 64 - 40 - 10, 10, 10, true, 9));
+        
+        mainMenu = new Menu("mainmenu.png");
+        /*
+         * Start Game
+         */
+        mainMenu.addButton(new Button(35, 256 - 90, 175 - 35, 90 - 75, true){
+			public void react(LibgdxTest model) {
+				Log.d("Button", "Start Game");
+				model.menuMode = false;
+				loadLevel(1);
+			}
+        });
+        /*
+         * Tutorial
+         */
+        mainMenu.addButton(new Button(60, 256 - 120, 178 - 60, 120 - 103, true){
+			public void react(LibgdxTest model) {
+				Log.d("Button", "Tutorial");
+			}
+        });
+        /*
+         * Levels
+         */
+        mainMenu.addButton(new Button(60, 256 - 146, 178 - 60, 146 - 129, true){
+			public void react(LibgdxTest model) {
+				Log.d("Button", "Levels");
+				model.currentMenu = model.levelMenu;
+			}
+        });
+        /*
+         * Scores
+         */
+        mainMenu.addButton(new Button(60, 256 - 171, 178 - 60, 171 - 156, true){
+			public void react(LibgdxTest model) {
+				Log.d("Button", "Scores");
+			}
+        });
+        /*
+         * Credits
+         */
+        mainMenu.addButton(new Button(60, 256 - 197, 178 - 60, 197 - 183, true){
+			public void react(LibgdxTest model) {
+				Log.d("Button", "Credits");
+			}
+        });
+        currentMenu = mainMenu;
 	}
 
 	public void render() {
@@ -274,6 +307,40 @@ public class LibgdxTest implements ApplicationListener{
 			Log.e("LibgdxTest", "Failed to load level " + levelName);
 		}
 		
+	}
+	
+	public static Vector3D vectorIntersectionWithRectangle(Vector3D p, Vector3D v, int x, int y, int w, int h){
+		Vector3D toReturn = new Vector3D();
+		int distanceToPoint = 100000000;
+		
+		double a = - v.getY();
+		double b = v.getX();
+		double d = a * p.getX() + b * p.getY();
+		
+		/*
+		 * Check against each side of the rectangle, represented by four point-vector pairs
+		 */
+		for (Vector3D[] side : new Vector3D[][] {{new Vector3D(x, y, 0), new Vector3D(1, 0, 0)}, {new Vector3D(x, y, 0), new Vector3D(0, 1, 0)},
+												 {new Vector3D(x + w, y, 0), new Vector3D(0, 1, 0)}, {new Vector3D(x, y + h, 0), new Vector3D(1, 0, 0)}}){
+			Vector3D p1 = side[0];
+			Vector3D v1 = side[1];
+			
+			double a1 = - v1.getY();
+			double b1 = v1.getX();
+			double d1 = a1 * p1.getX() + b1 * p1.getY();
+			
+			Vector3D intersection = new Vector3D((b1 * d - b * d1) / (a * b1 - a1 * b),
+					  							(a * d1 - a1 * d) / (a * b1 - a1 * b), 0);
+			
+			int dist = (int) intersection.subtract(p).length();
+			
+			if (dist < distanceToPoint && intersection.subtract(p).dotProduct(v) > 0){
+				toReturn = intersection;
+				distanceToPoint = dist;
+			}
+		}
+		
+		return toReturn;
 	}
 
 }
